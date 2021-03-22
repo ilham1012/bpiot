@@ -1,0 +1,26 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "testpass",
+    "database": "bpiot",
+    "host": "db",
+    "dialect": "postgres",
+    "protocol": "postgres"
+  },
+  "test": {
+    "username": "postgres",
+    "password": "testpass",
+    "database": "bpiot",
+    "host": "db",
+    "dialect": "postgres",
+    "protocol": "postgres"
+  },
+  "production": {
+    "username": "postgres",
+    "password": null,
+    "database": "bpiot_production",
+    "host": "db",
+    "dialect": "postgres",
+    "protocol": "postgres"
+  }
+}
