@@ -1,0 +1,62 @@
+services:
+  # subscriber:
+  #   build: ./test
+  #   working_dir: /code
+  #   volumes:
+  #     - ./test:/code
+  #   depends_on:
+  #     - broker
+
+  # broker:
+  #   container_name: broker
+  #   image: iegomez/mosquitto-go-auth
+  #   restart: always
+  #   volumes:
+  #     - ./mosquitto/config:/etc/mosquitto/
+  #     - ./mosquitto/data:/mosquitto/data
+  #     - ./mosquitto/log:/mosquitto/log
+  #   ports:
+  #     - 1883:1883
+  #   depends_on:
+  #     - auth
+  #     - backend
+  
+  # auth:
+  #   build: ./jwt
+  #   # restart: always
+  #   volumes:
+  #     - ./jwt:/code
+  #   ports:
+  #     - 3000:3000 
+
+  # transport:
+  #   container_name: transport
+  #   image: rabbitmq:3.8.14-management
+  #   restart: unless-stopped
+  #   hostname: rabbit
+
+  backend:
+    build: ./backend
+    # restart: always
+    volumes:
+      - ./backend:/code
+    ports:
+      - 5000:5000
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: testpass
+      POSTGRES_DB: node_test
+      POSTGRES_PORT: 5432
+    depends_on:
+      # - auth
+      - db
+
+  db:
+    image: "timescale/timescaledb:2.1.0-pg12"
+    ports:
+      - 5432:5432
+    environment:
+      # POSTGRES_USER: testuser
+      POSTGRES_PASSWORD: testpass
+    volumes:
+      - ./db/data:/var/lib/postgresql/data
