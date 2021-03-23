@@ -3,6 +3,7 @@ const {
   Model
 } = require('sequelize');
 const telemetry_key = require('./telemetry_key');
+const device = require('./device');
 module.exports = (sequelize, DataTypes) => {
   class telemetry extends Model {
     /**
@@ -21,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       references: {
         model: device,
         key: 'id',
-        deferrable: Deferrable.INITIALLY_IMMEDIATE
+        // deferrable: Deferrable.INITIALLY_IMMEDIATE
       }
     },
     key: {
@@ -29,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       references: {
         model: telemetry_key,
         key: 'id',
-        deferrable: Deferrable.INITIALLY_IMMEDIATE
+        // deferrable: Deferrable.INITIALLY_IMMEDIATE
       }
     },
     string_val: DataTypes.STRING,
