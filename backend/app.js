@@ -1,5 +1,8 @@
 const express = require('express')
 const Sequelize = require('sequelize')
+
+const telemetry = require('./telemetry/telemetry')
+
 const app = express()
 const port = 5000;
 
@@ -22,7 +25,7 @@ const sequelize = new Sequelize(
         // }
     })
 
-const Telemetry = require('./models').telemetry;
+const ModelTelemetry = require('./models').telemetry;
 
 sequelize.authenticate().then(() => {
     console.log('Connection has been established successfully. ');
@@ -32,20 +35,14 @@ sequelize.authenticate().then(() => {
 
 app.get('/', (req, res) => {
     const time = new Date().getTime();
-    const message = 'test';
-
-    // try {
-    //     // insert
-    //     await Telemetry.create({
-    //         time: time,
-    //         string_val: message 
-    //     });
-
-    //     res.send('Inserted! ');
-    // } catch (e) {
-    //     console.log('Error inserting data', e)
-    // }
+    const message = 'test ' + time;
     res.send(message);
 })
+
+
+telemetry.run({"broker": "broker.emqx.io"});
+
+
+
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
