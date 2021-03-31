@@ -21,7 +21,7 @@ services:
   #     DOCKER_VERNEMQ_VMQ_DIVERSITY__HTTP_AUTH__file: "/auth_http.lua"
   #     HTTP_AUTH: auth
   #   volumes:
-  #     - ./vernemq/auth_http.lua:/auth_http.lua
+  #     - ./broker/auth_http.lua:/auth_http.lua
   
   # auth:
   #   build: ./jwt
