@@ -8,22 +8,24 @@ services:
   #     - broker
 
   # broker:
-  #   container_name: broker
-  #   image: iegomez/mosquitto-go-auth
-  #   restart: always
-  #   volumes:
-  #     - ./mosquitto/config:/etc/mosquitto/
-  #     - ./mosquitto/data:/mosquitto/data
-  #     - ./mosquitto/log:/mosquitto/log
-  #   ports:
+  #   image: vernemq/vernemq
+  #   restart: unless-stopped
+  #   ports: 
   #     - 1883:1883
-  #   depends_on:
-  #     - auth
-  #     - backend
+  #   environment:
+  #     DOCKER_VERNEMQ_ACCEPT_EULA: "yes"
+  #     DOCKER_VERNEMQ_ALLOW_ANONYMOUS: "off"
+  #     DOCKER_VERNEMQ_PLUGINS__VMQ_PASSWD: "off"
+  #     DOCKER_VERNEMQ_PLUGINS__VMQ_ACL: "off"
+  #     DOCKER_VERNEMQ_PLUGINS__VMQ_DIVERSITY: "on"
+  #     DOCKER_VERNEMQ_VMQ_DIVERSITY__HTTP_AUTH__file: "/auth_http.lua"
+  #     HTTP_AUTH: auth
+  #   volumes:
+  #     - ./vernemq/auth_http.lua:/auth_http.lua
   
   # auth:
   #   build: ./jwt
-  #   # restart: always
+  #   restart: unless-stopped
   #   volumes:
   #     - ./jwt:/code
   #   ports:
@@ -45,8 +47,10 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: testpass
-      POSTGRES_DB: node_test
+      POSTGRES_DB: bpiot
+      POSTGRES_HOST: db
       POSTGRES_PORT: 5432
+      PORT: 5000
     depends_on:
       # - auth
       - db
@@ -60,3 +64,12 @@ services:
       POSTGRES_PASSWORD: testpass
     volumes:
       - ./db/data:/var/lib/postgresql/data
+
+  # tsdb:
+  #   image: "influxdb:2.0-alpine"
+  #   ports:
+  #     - 8086:8086
+  #   environment:
+
+  #   volumes: 
+  #     - ./db/ts:/var/lib/influxdb
