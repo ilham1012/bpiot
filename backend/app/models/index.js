@@ -22,22 +22,37 @@ db.USER_ROLES.USER = 3;
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.user = require("../models/user.model.js")(sequelize, Sequelize);
-// db.project = require("../models/project.model.js")(sequelize, Sequelize);
-// db.tutorials = require('./tutorial.model.js')(sequelize, Sequelize);
+db.user = require("./user.model.js")(sequelize, Sequelize);
+db.project = require("./project.model.js")(sequelize, Sequelize);
+db.device = require("./device.model.js")(sequelize, Sequelize);
+db.acl = require("./acl.model.js")(sequelize, Sequelize);
 
-// db.project.belongsToMany(db.user, {
-//     through: "user_projects",
-//     foreignKey: "projectId",
-//     otherKey: "userId"
-// });
+db.project.hasMany(db.device, { as: "devices" });
 
-// db.user.belongsToMany(db.project, {
-//     through: "user_projects",
-//     foreignKey: "userId",
-//     otherKey: "projectId"
-// });
+db.device.belongsTo(db.project, {
+  foreignKey: "projectId",
+  as: "project",
+});
 
+db.project.belongsToMany(db.user, {
+    as: 'users',
+    through: "user_projects",
+    // foreignKey: "projectId",
+    // otherKey: "userId"
+});
+
+db.user.belongsToMany(db.project, {
+    as: 'projects',
+    through: "user_projects",
+    // foreignKey: "userId",
+    // otherKey: "projectId"
+});
+
+db.device.hasMany(db.acl, {as: 'control_list'});
+db.acl.belongsTo(db.device, {
+    foreignKey: 'deviceId',
+    as: 'acl_device'
+});
 
 
 
