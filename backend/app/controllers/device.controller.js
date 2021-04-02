@@ -10,7 +10,8 @@ device.create = (projectId, device) => {
     console.log(device);
     return Device.create({
         projectId: projectId,
-        device_uid: nanoid(10),
+        uid: nanoid(10),
+        password: nanoid(12),
         name: device.name,
         description: device.description,
     })
@@ -33,8 +34,8 @@ device.findById = (id) => {
         });
 };
 
-device.findAll = () => {
-    return Device.findAll()
+device.findAll = (attr) => {
+    return Device.findAll({attributes: attr})
         .then((devices) => {
             return devices;
         });
@@ -63,7 +64,7 @@ device.api_findById = (req, res) => {
 }
 
 device.api_findAll = (req, res) => {
-    device.findAll()
+    device.findAll(['uid', 'name', 'description', 'projectId'])
         .then((result)=>{
             console.log(result);
         

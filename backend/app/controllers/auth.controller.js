@@ -1,6 +1,7 @@
 const db = require("../models");
 const config = require("../config/auth.config");
 const User = db.user;
+const Device = db.device;
 
 const Op = db.Sequelize.Op;
 
@@ -63,6 +64,48 @@ exports.signin = (req, res) => {
         });
 };
 
+
+exports.deviceGenerateToken = (req, res) => {
+    Device.findOne({
+        where: {
+            uid: req.body.uid
+        }
+    })
+        .then(device => {
+            if (!device) {
+                return res.status(404).send({ message: "Device not found." });
+            }
+            // var passwordIsValid = bcrypt.compareSync(
+            //     req.body.password,
+            //     device.password
+            // );
+
+            // if(!passwordIsValid){
+                // return res.status(401).send({
+                //     accessToken: null,
+                //     message: "Invalid Password!"
+                // });
+            // }
+
+            var token = jwt.sign({ id: device.id }, config.secret, {
+                // expiresIn: 86400*365 // 1 year
+            });
+
+            device.update({
+                token: token
+            }).then(()=>{
+                res.status(200).send({
+                    uid: device.uid,
+                    name: device.name,
+                    accessToken: token
+                })
+            });
+
+        })
+        .catch(err => {
+            res.status(500).send({ message: err.message });
+        });
+};
 // module.exports = {
 //     signup,
 //     signin

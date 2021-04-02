@@ -37,6 +37,7 @@ db.sequelize.sync({ force: true }).then(() => {
 const User = db.user;
 const ProjectController = require('./app/controllers/project.controller');
 const DeviceController = require('./app/controllers/device.controller');
+const ACLController = require('./app/controllers/acl.controller');
 
 
 async function initial() {
@@ -62,6 +63,17 @@ async function initial() {
         await DeviceController.create(1, {
             name: "test device",
             description: "test device desc."
+        }).then(async (newDevice) => {
+            await ACLController.create(newDevice.id, {
+                pub: true,
+                pattern: "test/#"
+            });
+
+            await ACLController.create(newDevice.id, {
+                pub: false,
+                pattern: "test/#"
+            });
+
         });
 
     });
@@ -86,6 +98,7 @@ app.get('/', (req, res) => {
 require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
 require("./app/routes/device.routes")(app);
+require("./app/routes/acl.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

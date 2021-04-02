@@ -9,13 +9,14 @@ function auth_on_register(reg)
         key = json.encode({
             mountpoint = reg.mountpoint,
             client_id = reg.client_id, 
-            username = reg.username,
-            password = reg.password
+            -- username = reg.username,
+            -- password = reg.password
         })
         headers = {}
         headers["x_post_header"] = "X-POST-HEADER"
         headers['Accept'] = "application/json"
         headers["Content-Type"] = "application/json"
+        headers["Authorization"] = "Bearer " .. reg.password
 
         ret = http.post(pool, URL, key, headers)
         -- for key,value in pairs(o) do
