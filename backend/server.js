@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const bcrypt = require('bcryptjs');
 
 const app = express();
 
@@ -34,30 +35,44 @@ db.sequelize.sync({ force: true }).then(() => {
 
 // const Role = db.role;
 const User = db.user;
-const bcrypt = require('bcryptjs');
+const ProjectController = require('./app/controllers/project.controller');
+const DeviceController = require('./app/controllers/device.controller');
+
 
 async function initial() {
-//     Role.create({
-//       id: 1,
-//       name: "user"
-//     });
-   
-//     Role.create({
-//       id: 2,
-//       name: "moderator"
-//     });
-   
-//     Role.create({
-//       id: 3,
-//       name: "admin"
-//     });
 
+    // Create 1st user
     await User.create({
         username: "test",
         email: "test@min.com",
         password: bcrypt.hashSync("1234", 8),
         role: db.USER_ROLES.ADMIN
     });
+
+    // create 1st project
+    await ProjectController.create({
+        name: "test project",
+        description: "test project desc."
+    }).then(async (newProject) => {
+
+        // add 1st user as project 1 user
+        await ProjectController.addUser(newProject.id, 1);
+
+        // create 1st device, belong to 1st project
+        await DeviceController.create(1, {
+            name: "test device",
+            description: "test device desc."
+        });
+
+    });
+
+    await ProjectController.findById(1).then((project)=>{
+        console.log("------ FIND PROJECT ----");
+        console.log(project.users);
+    });
+    
+    // console.log(await ProjectController.findAll());
+
 
     
 };
@@ -70,6 +85,7 @@ app.get('/', (req, res) => {
 // require("./app/routes/tutorial.routes")(app);
 require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
+require("./app/routes/device.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
