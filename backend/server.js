@@ -66,12 +66,12 @@ async function initial() {
         }).then(async (newDevice) => {
             await ACLController.create(newDevice.id, {
                 pub: true,
-                pattern: "test/#"
+                pattern: "#"
             });
 
             await ACLController.create(newDevice.id, {
                 pub: false,
-                pattern: "test/#"
+                pattern: "#"
             });
 
         });
