@@ -26,6 +26,8 @@ db.user = require("./user.model.js")(sequelize, Sequelize);
 db.project = require("./project.model.js")(sequelize, Sequelize);
 db.device = require("./device.model.js")(sequelize, Sequelize);
 db.acl = require("./acl.model.js")(sequelize, Sequelize);
+db.telemetry = require("./telemetry.model.js")(sequelize, Sequelize);
+db.telemetry_key = require("./telemetry_key.model.js")(sequelize, Sequelize);
 
 db.project.hasMany(db.device, { as: "devices" });
 
@@ -54,6 +56,17 @@ db.acl.belongsTo(db.device, {
     as: 'acl_device'
 });
 
+db.device.hasMany(db.telemetry, {as: 'telemetry'});
+db.telemetry.belongsTo(db.device, {
+    foreignKey: 'deviceId',
+    as: 'telemetry_device'
+});
+
+db.telemetry_key.hasMany(db.telemetry, {as: 'key_telemetry'});
+db.telemetry.belongsTo(db.telemetry_key, {
+    foreignKey: 'keyId',
+    as: 'telemetry_key'
+});
 
 
 module.exports = db;
