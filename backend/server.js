@@ -29,6 +29,9 @@ db.sequelize.authenticate().then(() => {
 
 // for development
 db.sequelize.sync({ force: true }).then(() => {
+    db.sequelize.query("CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;");
+    db.sequelize.query("SELECT create_hypertable('telemetries', 'time');");
+
     console.log("Drop and re-sync db.");
     initial().then(console.log("initial"));
 });
@@ -38,6 +41,7 @@ const User = db.user;
 const ProjectController = require('./app/controllers/project.controller');
 const DeviceController = require('./app/controllers/device.controller');
 const ACLController = require('./app/controllers/acl.controller');
+const AuthController = require('./app/controllers/auth.controller');
 
 
 async function initial() {
@@ -74,6 +78,17 @@ async function initial() {
                 pattern: "#"
             });
 
+            await AuthController.deviceGenerateToken(
+                {
+                    body: {
+                        uid: newDevice.uid
+                    }
+                },
+                {
+                    status: 404
+                }
+            );
+
         });
 
     });
@@ -99,6 +114,9 @@ require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
 require("./app/routes/device.routes")(app);
 require("./app/routes/acl.routes")(app);
+
+
+const Listener = require('./app/listeners');
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
