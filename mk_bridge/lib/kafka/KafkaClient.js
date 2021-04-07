@@ -47,8 +47,6 @@ class KafkaClient extends EventEmitter {
         const _key = uuid.v4();
 
         console.log("KafkaClient");
-        console.log("topic: ", _topic);
-        console.log("message: ", _message);
 
         if(!this.etl){
 
@@ -79,8 +77,8 @@ class KafkaClient extends EventEmitter {
                     message = JSON.stringify(message);
                 }
 
-                console.log("topic_: ", topic);
-                console.log("message_: ", message);
+                console.log("k_t: ", topic);
+                console.log("k_m: ", message);
                 // this.producer.send(topic, message, partition, key).then(resolve).catch(reject);
                 this.producer.send({ topic: topic, messages: [{ key: key, value: message }]}).then(resolve).catch(reject);
             });

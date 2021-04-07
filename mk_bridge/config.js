@@ -21,7 +21,7 @@ module.exports = {
         logger: undefined,
         noptions: {
             //"debug": "all",
-            metadata_broker_list: ["172.20.0.6:9092"],
+            metadata_broker_list: [process.env.KAFKA_HOST || "kafka:9092"], //172.20.0.6
             client_id: "mqtt-bridge-example-client",
             "event_cb": true,
             "compression.codec": "none",
@@ -68,7 +68,10 @@ module.exports = {
         // first param is an error, if you pass one, we will omit the message
         callback(null, {
             topic,
-            message,
+            message: {
+                mqtt_topic: topic,
+                payload: message
+            },
         });
     },
 
@@ -77,7 +80,10 @@ module.exports = {
         // first param is an error, if you pass one, we will omit the message
         callback(null, {
             topic,
-            message, // you can pass an object, will be turned into a string
+            message: {
+                type: "mqtt_telemetry",
+                message: message
+            }, // you can pass an object, will be turned into a string
             key, // default uuid.v4
             partition: null, // default null
         });
