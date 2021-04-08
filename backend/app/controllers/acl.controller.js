@@ -3,10 +3,10 @@ const { nanoid } = require('nanoid');
 const db = require("../models");
 const ACL = db.acl;
 
-exports.create = (deviceId, acl) => {
+exports.create = (device_id, acl) => {
     console.log(acl);
     return ACL.create({
-        deviceId: deviceId,
+        device_id: device_id,
         pub: acl.pub,
         pattern: acl.pattern,
     })
@@ -20,7 +20,7 @@ exports.create = (deviceId, acl) => {
   };
 
 exports.findById = (id) => {
-    return ACL.findAll({where: {deviceId: id}})
+    return ACL.findAll({where: {device_id: id}})
         .then((acl) => {
             return acl;
         })
@@ -39,7 +39,7 @@ exports.findAll = (attr) => {
 
 exports.api_create = (req, res) => {
     console.log(req.body);
-    this.create(req.body.deviceId, req.body)
+    this.create(req.body.device_id, req.body)
         .then((newACL)=>{
             if (newACL != null){
                 return res.status(201).send({message: 'ACL was created successfully'});
@@ -59,7 +59,7 @@ exports.api_findById = (req, res) => {
 }
 
 exports.api_findAll = (req, res) => {
-    this.findAll(['deviceId', 'pub', 'pattern'])
+    this.findAll(['device_id', 'pub', 'pattern'])
         .then((result)=>{
             console.log(result);
         
@@ -81,7 +81,7 @@ exports.mqttAuth = (req, res) => {
     send.publish_acl = [];
     send.subscribe_acl = [];
 
-    ACL.findAll({where: {deviceId: req.userId}})
+    ACL.findAll({where: {device_id: req.userId}})
         .then((acl) => {
             acl.forEach(ac => {
                 item = { pattern: ac.pattern };

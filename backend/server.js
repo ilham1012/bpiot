@@ -65,7 +65,7 @@ async function initial() {
     // create 1st project
     await ProjectController.create({
         name: "test project",
-        description: "test project desc."
+        description: "test project desc. "
     }).then(async (newProject) => {
 
         // add 1st user as project 1 user
@@ -113,10 +113,7 @@ app.get('/', (req, res) => {
 });
 
 // require("./app/routes/tutorial.routes")(app);
-require("./app/routes/auth.routes")(app);
-require("./app/routes/user.routes")(app);
-require("./app/routes/device.routes")(app);
-require("./app/routes/acl.routes")(app);
+require("./app/routes/index")(app);
 
 
 // const Listener = require('./app/listeners');

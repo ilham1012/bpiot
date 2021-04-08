@@ -6,10 +6,10 @@ const Device = db.device;
 
 const device = {};
 
-device.create = (projectId, device) => {
+device.create = (project_id, device) => {
     console.log(device);
     return Device.create({
-        projectId: projectId,
+        project_id: project_id,
         uid: nanoid(10),
         password: nanoid(12),
         name: device.name,
@@ -44,7 +44,7 @@ device.findAll = (attr) => {
 
 device.api_create = (req, res) => {
     console.log(req.body);
-    device.create(req.body.projectId, req.body)
+    device.create(req.body.project_id, req.body)
         .then((newDevice)=>{
             if (newDevice != null){
                 return res.status(201).send({message: 'Device was created successfully'});
@@ -64,7 +64,7 @@ device.api_findById = (req, res) => {
 }
 
 device.api_findAll = (req, res) => {
-    device.findAll(['uid', 'name', 'description', 'projectId'])
+    device.findAll(['uid', 'name', 'description', 'project_id'])
         .then((result)=>{
             console.log(result);
         
