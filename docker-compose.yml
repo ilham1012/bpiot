@@ -8,43 +8,44 @@ services:
   #   depends_on:
   #     - broker
 
-  zookeeper:
-    image: 'bitnami/zookeeper:latest'
-    ports:
-     - '2181:2181'
-    environment:
-      ZOO_ENABLE_AUTH: "yes"
-      ZOO_SERVER_USERS: kafka
-      ZOO_SERVER_PASSWORDS: kafka_password
+  # zookeeper:
+  #   image: 'bitnami/zookeeper:latest'
+  #   ports:
+  #    - '2181:2181'
+  #   environment:
+  #     ZOO_ENABLE_AUTH: "yes"
+  #     ZOO_SERVER_USERS: kafka
+  #     ZOO_SERVER_PASSWORDS: kafka_password
 
-  kafka:
-    image: 'bitnami/kafka:latest'
-    hostname: kafka.example.com
-    ports:
-      - '9092:9092'
-      - '9094:9094'
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
-      KAFKA_LISTENERS: INSIDE://:9092,OUTSIDE://:9094
-      KAFKA_ADVERTISED_LISTENERS: INSIDE://:9092,OUTSIDE://172.17.0.1:9094
-      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
-      ALLOW_PLAINTEXT_LISTENER: "yes"
-    depends_on:
-      - zookeeper
+  # kafka:
+  #   image: 'bitnami/kafka:latest'
+  #   hostname: kafka.example.com
+  #   ports:
+  #     - '9092:9092'
+  #     - '9094:9094'
+  #   environment:
+  #     KAFKA_BROKER_ID: 1
+  #     KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+  #     KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+  #     KAFKA_LISTENERS: INSIDE://:9092,OUTSIDE://:9094
+  #     KAFKA_ADVERTISED_LISTENERS: INSIDE://:9092,OUTSIDE://172.17.0.1:9094
+  #     KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+  #     ALLOW_PLAINTEXT_LISTENER: "yes"
+  #   depends_on:
+  #     - zookeeper
 
-  mk_bridge:
-    build: ./mk_bridge
-    restart: unless-stopped
-    volumes:
-      - ./mk_bridge:/code
-    ports:
-      - 3967:3967
-    environment:
-      KAFKA_HOST: kafka:9092
-    depends_on:
-      - kafka
+  # mk_bridge:
+  #   build: ./mk_bridge
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./mk_bridge:/code
+  #   ports:
+  #     - 3967:3967
+  #   environment:
+  #     KAFKA_HOST: kafka:9092
+  #   depends_on:
+  #     - broker
+  #     - kafka
 
   # mqtt_kafka:
   #   build: ./mqtt_kafka
@@ -56,21 +57,21 @@ services:
   #   # depends_on:
   #   #   - kafka
 
-  broker:
-    image: vernemq/vernemq
-    restart: unless-stopped
-    ports: 
-      - 1883:1883
-    environment:
-      DOCKER_VERNEMQ_ACCEPT_EULA: "yes"
-      DOCKER_VERNEMQ_ALLOW_ANONYMOUS: "off"
-      DOCKER_VERNEMQ_PLUGINS__VMQ_PASSWD: "off"
-      DOCKER_VERNEMQ_PLUGINS__VMQ_ACL: "off"
-      DOCKER_VERNEMQ_PLUGINS__VMQ_DIVERSITY: "on"
-      DOCKER_VERNEMQ_VMQ_DIVERSITY__HTTP_AUTH__file: "/auth_http.lua"
-      HTTP_AUTH: auth
-    volumes:
-      - ./broker/auth_http.lua:/auth_http.lua
+  # broker:
+  #   image: vernemq/vernemq
+  #   restart: unless-stopped
+  #   ports: 
+  #     - 1883:1883
+  #   environment:
+  #     DOCKER_VERNEMQ_ACCEPT_EULA: "yes"
+  #     DOCKER_VERNEMQ_ALLOW_ANONYMOUS: "off"
+  #     DOCKER_VERNEMQ_PLUGINS__VMQ_PASSWD: "off"
+  #     DOCKER_VERNEMQ_PLUGINS__VMQ_ACL: "off"
+  #     DOCKER_VERNEMQ_PLUGINS__VMQ_DIVERSITY: "on"
+  #     DOCKER_VERNEMQ_VMQ_DIVERSITY__HTTP_AUTH__file: "/auth_http.lua"
+  #     HTTP_AUTH: auth
+  #   volumes:
+  #     - ./broker/auth_http.lua:/auth_http.lua
   
   # auth:
   #   build: ./jwt
@@ -103,6 +104,7 @@ services:
     depends_on:
       # - auth
       - db
+      # - mk_bridge
 
   db:
     image: "timescale/timescaledb:2.1.0-pg12"

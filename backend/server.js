@@ -18,7 +18,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const db = require('./app/models');
-// db.sequelize.sync();
 
 db.sequelize.authenticate().then(() => {
     console.log('Connection has been established successfully. ');
@@ -28,6 +27,7 @@ db.sequelize.authenticate().then(() => {
 
 
 // for development
+// db.sequelize.sync();
 db.sequelize.sync({ force: true }).then(() => {
     db.sequelize.query("CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;");
     db.sequelize.query("SELECT create_hypertable('telemetries', 'time');");
@@ -35,6 +35,14 @@ db.sequelize.sync({ force: true }).then(() => {
     console.log("Drop and re-sync db.");
     initial().then(console.log("initial"));
 });
+
+// db.sequelize.sync({ alter: true }).then(() => {
+//     // db.sequelize.query("CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;");
+//     // db.sequelize.query("SELECT create_hypertable('telemetries', 'time');");
+
+//     // console.log("Drop and re-sync db.");
+//     // initial().then(console.log("initial"));
+// });
 
 // const Role = db.role;
 const User = db.user;
@@ -92,11 +100,6 @@ async function initial() {
         });
 
     });
-
-    await ProjectController.findById(1).then((project)=>{
-        console.log("------ FIND PROJECT ----");
-        console.log(project.users);
-    });
     
     // console.log(await ProjectController.findAll());
 
@@ -116,10 +119,10 @@ require("./app/routes/device.routes")(app);
 require("./app/routes/acl.routes")(app);
 
 
-const Listener = require('./app/listeners');
+// const Listener = require('./app/listeners');
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}. `);
+    console.log(`Server is running on port ${PORT}.  `);
 });
