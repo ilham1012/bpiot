@@ -1,6 +1,5 @@
 const { Kafka } = require('kafkajs');
-const Telemetry = require('../models/telemetry.model');
-const Telemetry_key = require('../models/telemetry_key.model');
+const db = require("../models");
 
 module.exports.run = async function(opt){
     const kafka = new Kafka({
@@ -25,14 +24,26 @@ module.exports.run = async function(opt){
 
     await consumer.run({
         eachMessage: async ({ topic, partition, message }) => {
-            console.log("=== TELE LISTERNER ===")
+            kafka_key = message.key.toString();
+            kafka_msg = JSON.parse(message.value.toString());
+
+            console.log("=== TELE LISTENER ===");
             console.log({
-                key: message.key.toString(),
-                value: message.value.toString(),
+                key: kafka_key,
+                value: kafka_msg,
                 headers: message.headers,
-            })
+            });
+
+
+            const saveSuccess = await saveDB(kafka_msg.message.payload);
+
+            if (saveSuccess){
+                console.log("SaveDB SUCCESS");
+            } else {
+                console.log("SaveDB FAILED");
+            }
         },
-    })
+    });
     
     // client.on("connect",function(){	
     //     console.log("connected");
@@ -49,11 +60,12 @@ module.exports.run = async function(opt){
     //     console.log("topic is "+ topic);
     //     console.log("message is "+ message);
 
-    //     saveDB(message);
     // });
 
-    const saveDB = async(message) => {
-        message = JSON.parse(message);
+    const saveDB = async(payload) => {
+        // message = JSON.parse(message);
+        console.log("SaveDB");
+        console.log(payload);
         // const device_id = message.device_id;
         // const time = message.time;
 
@@ -64,40 +76,54 @@ module.exports.run = async function(opt){
         // };
         
 
-        var data = {}
-        // only if no time provided
-        data.time = new Date().getTime();
-
-        // insert device, but it needs to be the device_id
-        // TODO: find how to get device ID from Device Token
-        // make a query to devices
-        data.device = 2;
+        var data = [];
         
-        // insert key, but it needs to be the key_id
-        // make a query to telemetry_key or create new if not exist
-        // data.key = Object.keys(message)[0];
-        data.key = 2;
+        // only if no time provided
+        var time = Date.now();
+        
+        var keys = Object.keys(payload.data);
+        
+        for (i=0; i < keys.length; i++){
+            var row = {};
+            row.time = time;
+            // insert device, but it needs to be the device_id
+            // make a query to devices, get the id
+            const device = await db.device.findOne({ where: { uid: payload.device_uid } });
 
-        // key = Object.keys(message)[0];
-        // val = Object.values(message)[0];
+            if (!device){
+                return false;                
+            }
 
-        // console.log("key " + key);
-        // console.log("val " + message.temperature);
+            row.telemetryDeviceId = device.id;
+            
+            // insert key, but it needs to be the key_id
+            // make a query to telemetry_key or create new if not exist
+            const [telemetry_key, created] = await db.telemetry_key.findOrCreate({ where: { key: keys[i] } });
+            row.telemetryKeyId = telemetry_key.id;
+
+            const value = payload.data[keys[i]];
+            row[checkType(value)] = value;
+            data.push(row);
+        }
+
 
         // insert value
-        data[checkType(Object.values(message)[0])] = Object.values(message)[0];
 
         console.log(data);
 
         try {
             // insert
-            // await Telemetry.bulkCreate({
-            await ModelTelemetry.create(data);
+            const rows = await db.telemetry.bulkCreate(data);
+            
+            if (rows.length == data.length){
+                return true;
+            }
 
-            res.send('Inserted! ');
         } catch (e) {
             console.log('Error inserting data', e)
         }
+        
+        return false
 
     }
 
@@ -127,3 +153,4 @@ module.exports.run = async function(opt){
        
 
 };
+
