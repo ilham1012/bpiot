@@ -31,6 +31,7 @@ device.findById = (id) => {
         })
         .catch((err) => {
             console.log(">> Error while finding device: ", err);
+            return null;
         });
 };
 
@@ -42,7 +43,7 @@ device.findAll = (attr) => {
 };
 
 
-// Update a Project by the id in the request
+// Update a Device by the id in the request
 device.update = (id, body) => {
     const name = body.name;
     const desc = body.description;
@@ -63,7 +64,7 @@ device.update = (id, body) => {
 }
 
 
-// Delete a Project with the specified id in the request
+// Delete a Device with the specified id in the request
 device.delete = (id) => {
     // const id = req.params.id;
 
