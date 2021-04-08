@@ -11,8 +11,11 @@ module.exports = function(app) {
         next();
     });
 
-    app.get("/api/v1/device",  controller.api_findAll);
-    app.get("/api/v1/device/:id", controller.api_findById); //[authJwt.verifyToken]
-    app.post("/api/v1/device",  controller.api_create);
-    app.post("/api/v1/device/token", [authJwt.verifyToken], auth.api_deviceGenerateToken);
+    app.get("/api/v1/devices",  controller.api_findAll);
+    app.get("/api/v1/devices/:id", controller.api_findById); //[authJwt.verifyToken]
+    app.post("/api/v1/devices",  controller.api_create);
+    app.put("/api/v1/devices/:id",  controller.api_update);
+    app.delete("/api/v1/devices/:id",  controller.api_delete);
+
+    app.post("/api/v1/devices/token", [authJwt.verifyToken], auth.api_deviceGenerateToken);
 };
