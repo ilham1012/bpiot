@@ -16,6 +16,7 @@ exports.create = (device_id, acl) => {
         })
         .catch((err) => {
             console.log(">> Error while creating project: ", err);
+            return null;
         });
   };
 
@@ -26,6 +27,7 @@ exports.findById = (id) => {
         })
         .catch((err) => {
             console.log(">> Error while finding device: ", err);
+            return null;
         });
 };
 
@@ -35,6 +37,46 @@ exports.findAll = (attr) => {
             return acl;
         });
 };
+
+
+// Update a Device by the id in the request
+exports.update = (id, body) => {
+
+    return ACL.update({pub: body.pub, patern: body.pattern}, {
+      where: { id: id }
+    })
+        .then(num => {
+            if (num == 1) {
+                return {status: 200, message: "ACL was updated successfully."};
+            } else {
+                return {status: 404, message: `Cannot update ACL with id=${id}. Maybe ACL was not found or req.body is empty!`};
+            }
+        })
+    .catch(err => {
+        return {status: 500, message: "Error updating ACL with id=" + id};
+    });
+}
+
+
+// Delete a Device with the specified id in the request
+exports.delete = (id) => {
+    return ACL.destroy({
+        where: { id: id }
+    })
+        .then(num => {
+        if (num == 1) {
+            return {status: 200, message: "ACL was deleted successfully!"};
+        } else {
+            return {status: 404, message: `Cannot delete ACL with id=${id}. Maybe ACL was not found!`};
+        }
+    })
+    .catch(err => {
+        return {status: 500, message: "Could not delete ACL with id=" + id};
+    });
+};
+
+
+// ========== API ==========
 
 
 exports.api_create = (req, res) => {
@@ -99,3 +141,14 @@ exports.mqttAuth = (req, res) => {
             res.status(500).send({ message: err.message });
         });
 };
+
+
+exports.api_update = async(req, res) => {
+    let result = await this.update(req.params.id, req.body);
+    return res.status(result.status).send({message: result.message});
+};
+
+exports.api_delete = async(req, res) => {
+    let result = await this.delete(req.params.id);
+    return res.status(result.status).send({message: result.message});
+}
