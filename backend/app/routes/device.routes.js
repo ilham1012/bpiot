@@ -14,5 +14,5 @@ module.exports = function(app) {
     app.get("/api/v1/device",  controller.api_findAll);
     app.get("/api/v1/device/:id", controller.api_findById); //[authJwt.verifyToken]
     app.post("/api/v1/device",  controller.api_create);
-    app.post("/api/v1/device/token", [authJwt.verifyToken], auth.deviceGenerateToken);
+    app.post("/api/v1/device/token", [authJwt.verifyToken], auth.api_deviceGenerateToken);
 };

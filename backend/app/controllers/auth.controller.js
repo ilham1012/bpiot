@@ -65,47 +65,52 @@ exports.signin = (req, res) => {
 };
 
 
-exports.deviceGenerateToken = (req, res) => {
-    Device.findOne({
+exports.deviceGenerateToken = async (req) => {
+    console.log("find: ", req.body.uid);
+    let device = await Device.findOne({
         where: {
             uid: req.body.uid
         }
+    });
+
+    if (!device) {
+        console.log("404");
+        return {status: 404, message: "Device not found."}; // res.status(404).send({ message: "Device not found." });
+    }
+
+    var token = jwt.sign({ id: device.id }, config.secret, {
+        // expiresIn: 86400*365 // 1 year
+    });
+
+    return device.update({
+        token: token
+    }).then(()=>{
+        console.log("200");
+        return {status: 200, message: {
+            uid: device.uid,
+            name: device.name,
+            accessToken: token
+        }};
     })
-        .then(device => {
-            if (!device) {
-                return res.status(404).send({ message: "Device not found." });
-            }
-            // var passwordIsValid = bcrypt.compareSync(
-            //     req.body.password,
-            //     device.password
-            // );
-
-            // if(!passwordIsValid){
-                // return res.status(401).send({
-                //     accessToken: null,
-                //     message: "Invalid Password!"
-                // });
-            // }
-
-            var token = jwt.sign({ id: device.id }, config.secret, {
-                // expiresIn: 86400*365 // 1 year
-            });
-
-            device.update({
-                token: token
-            }).then(()=>{
-                res.status(200).send({
-                    uid: device.uid,
-                    name: device.name,
-                    accessToken: token
-                })
-            });
-
-        })
-        .catch(err => {
-            res.status(500).send({ message: err.message });
-        });
+    .catch(err => {
+        console.log("500");
+        return {status: 500, message: err.message};
+    });
 };
+
+exports.api_deviceGenerateToken = (req, res) => {
+    this.deviceGenerateToken(req)
+            .then(result => { 
+                console.log(result);
+ 
+                if (result.status == 200){
+                    return res.status(result.status).send(result.message);
+                }
+            
+                return res.status(result.status).send({message: result.message});
+            });
+
+}
 // module.exports = {
 //     signup,
 //     signin
