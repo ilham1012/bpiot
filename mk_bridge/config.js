@@ -54,7 +54,7 @@ module.exports = {
         //"*": "kafka-test", // from all to single kafka-test topic
         //"mqtt-topic": "kafka-topic", // from mqtt-topic to kafka-topic only
 
-        "*": "mqtt-bridge-example"
+        "*": "bpiot_telemetry"
     },
 
     // if routed messages should be logged to debug
