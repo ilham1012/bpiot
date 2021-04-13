@@ -1,0 +1,254 @@
+extends ../layout.pug
+
+block page_scripts
+  script(src='js/pages/device.js')
+
+block header
+  .header.bg-gradient-primary.pb-6
+    .container-fluid
+      .header-body
+        .row.align-items-center.py-4
+          .col-lg-6.col-7
+            h6.h2.text-white.d-inline-block.mb-0= title
+            nav.d-none.d-md-inline-block.ml-md-4(aria-label='breadcrumb')
+              ol.breadcrumb.breadcrumb-links.breadcrumb-dark
+                li.breadcrumb-item
+                  a(href='#')
+                    i.fas.fa-home
+                li.breadcrumb-item.active(aria-current='page') Devices
+          .col-lg-6.col-5.text-right
+            a.btn.btn-sm.btn-neutral(href='#') New
+            //- a.btn.btn-sm.btn-neutral(href='#') Filters
+
+block content
+  .col
+    .card
+      // Card header
+      .card-header.border-0
+        h3.mb-0 Device List
+      .table-responsive#devices-app
+      
+
+    .card
+      // Card header
+      .card-header.border-0
+        h3.mb-0 Device List
+      // Light table
+      .table-responsive
+        table.table.align-items-center.table-flush
+          thead.thead-light
+            tr
+              th.sort(scope='col' data-sort='name') Project
+              th.sort(scope='col' data-sort='budget') Budget
+              th.sort(scope='col' data-sort='status') Status
+              th(scope='col') Users
+              th.sort(scope='col' data-sort='completion') Completion
+              th(scope='col')
+          tbody.list
+            tr
+              th(scope='row')
+                .media.align-items-center
+                  a.avatar.rounded-circle.mr-3(href='#')
+                    img(alt='Image placeholder' src='img/theme/bootstrap.jpg')
+                  .media-body
+                    span.name.mb-0.text-sm Argon Design System
+              td.budget
+                | $2500 USD
+              td
+                span.badge.badge-dot.mr-4
+                  i.bg-warning
+                  span.status pending
+              td
+                .avatar-group
+                  a.avatar.avatar-sm.rounded-circle(href='#' data-toggle='tooltip' data-original-title='Ryan Tompson')
+                    img(alt='Image placeholder' src='img/theme/team-1.jpg')
+                  a.avatar.avatar-sm.rounded-circle(href='#' data-toggle='tooltip' data-original-title='Romina Hadid')
+                    img(alt='Image placeholder' src='img/theme/team-2.jpg')
+                  a.avatar.avatar-sm.rounded-circle(href='#' data-toggle='tooltip' data-original-title='Alexander Smith')
+                    img(alt='Image placeholder' src='img/theme/team-3.jpg')
+                  a.avatar.avatar-sm.rounded-circle(href='#' data-toggle='tooltip' data-original-title='Jessica Doe')
+                    img(alt='Image placeholder' src='img/theme/team-4.jpg')
+              td
+                .d-flex.align-items-center
+                  span.completion.mr-2 60%
+                  div
+                    .progress
+                      .progress-bar.bg-warning(role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: 60%;')
+              td.text-right
+                .dropdown
+                  a.btn.btn-sm.btn-icon-only.text-light(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+                    i.fas.fa-ellipsis-v
+                  .dropdown-menu.dropdown-menu-right.dropdown-menu-arrow(style='')
+                    a.dropdown-item(href='#') Action
+                    a.dropdown-item(href='#') Another action
+                    a.dropdown-item(href='#') Something else here
+            tr
+              th(scope='row')
+                .media.align-items-center
+                  a.avatar.rounded-circle.mr-3(href='#')
+                    img(alt='Image placeholder' src='img/theme/angular.jpg')
+                  .media-body
+                    span.name.mb-0.text-sm Angular Now UI Kit PRO
+              td.budget
+                | $1800 USD
+              td
+                span.badge.badge-dot.mr-4
+                  i.bg-success
+                  span.status completed
+              td
+                .avatar-group
+                  a.avatar.avatar-sm.rounded-circle(href='#' data-toggle='tooltip' data-original-title='Ryan Tompson')
+                    img(alt='Image placeholder' src='img/theme/team-1.jpg')
+                  a.avatar.avatar-sm.rounded-circle(href='#' data-toggle='tooltip' data-original-title='Romina Hadid')
+                    img(alt='Image placeholder' src='img/theme/team-2.jpg')
+                  a.avatar.avatar-sm.rounded-circle(href='#' data-toggle='tooltip' data-original-title='Alexander Smith')
+                    img(alt='Image placeholder' src='img/theme/team-3.jpg')
+                  a.avatar.avatar-sm.rounded-circle(href='#' data-toggle='tooltip' data-original-title='Jessica Doe')
+                    img(alt='Image placeholder' src='img/theme/team-4.jpg')
+              td
+                .d-flex.align-items-center
+                  span.completion.mr-2 100%
+                  div
+                    .progress
+                      .progress-bar.bg-success(role='progressbar' aria-valuenow='100' aria-valuemin='0' aria-valuemax='100' style='width: 100%;')
+              td.text-right
+                .dropdown
+                  a.btn.btn-sm.btn-icon-only.text-light(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+                    i.fas.fa-ellipsis-v
+                  .dropdown-menu.dropdown-menu-right.dropdown-menu-arrow
+                    a.dropdown-item(href='#') Action
+                    a.dropdown-item(href='#') Another action
+                    a.dropdown-item(href='#') Something else here
+            tr
+              th(scope='row')
+                .media.align-items-center
+                  a.avatar.rounded-circle.mr-3(href='#')
+                    img(alt='Image placeholder' src='img/theme/sketch.jpg')
+                  .media-body
+                    span.name.mb-0.text-sm Black Dashboard
+              td.budget
+                | $3150 USD
+              td
+                span.badge.badge-dot.mr-4
+                  i.bg-danger
+                  span.status delayed
+              td
+                .avatar-group
+                  a.avatar.avatar-sm.rounded-circle(href='#' data-toggle='tooltip' data-original-title='Ryan Tompson')
+                    img(alt='Image placeholder' src='img/theme/team-1.jpg')
+                  a.avatar.avatar-sm.rounded-circle(href='#' data-toggle='tooltip' data-original-title='Romina Hadid')
+                    img(alt='Image placeholder' src='img/theme/team-2.jpg')
+                  a.avatar.avatar-sm.rounded-circle(href='#' data-toggle='tooltip' data-original-title='Alexander Smith')
+                    img(alt='Image placeholder' src='img/theme/team-3.jpg')
+                  a.avatar.avatar-sm.rounded-circle(href='#' data-toggle='tooltip' data-original-title='Jessica Doe')
+                    img(alt='Image placeholder' src='img/theme/team-4.jpg')
+              td
+                .d-flex.align-items-center
+                  span.completion.mr-2 72%
+                  div
+                    .progress
+                      .progress-bar.bg-danger(role='progressbar' aria-valuenow='72' aria-valuemin='0' aria-valuemax='100' style='width: 72%;')
+              td.text-right
+                .dropdown
+                  a.btn.btn-sm.btn-icon-only.text-light(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+                    i.fas.fa-ellipsis-v
+                  .dropdown-menu.dropdown-menu-right.dropdown-menu-arrow
+                    a.dropdown-item(href='#') Action
+                    a.dropdown-item(href='#') Another action
+                    a.dropdown-item(href='#') Something else here
+            tr
+              th(scope='row')
+                .media.align-items-center
+                  a.avatar.rounded-circle.mr-3(href='#')
+                    img(alt='Image placeholder' src='img/theme/react.jpg')
+                  .media-body
+                    span.name.mb-0.text-sm React Material Dashboard
+              td.budget
+                | $4400 USD
+              td
+                span.badge.badge-dot.mr-4
+                  i.bg-info
+                  span.status on schedule
+              td
+                .avatar-group
+                  a.avatar.avatar-sm.rounded-circle(href='#' data-toggle='tooltip' data-original-title='Ryan Tompson')
+                    img(alt='Image placeholder' src='img/theme/team-1.jpg')
+                  a.avatar.avatar-sm.rounded-circle(href='#' data-toggle='tooltip' data-original-title='Romina Hadid')
+                    img(alt='Image placeholder' src='img/theme/team-2.jpg')
+                  a.avatar.avatar-sm.rounded-circle(href='#' data-toggle='tooltip' data-original-title='Alexander Smith')
+                    img(alt='Image placeholder' src='img/theme/team-3.jpg')
+                  a.avatar.avatar-sm.rounded-circle(href='#' data-toggle='tooltip' data-original-title='Jessica Doe')
+                    img(alt='Image placeholder' src='img/theme/team-4.jpg')
+              td
+                .d-flex.align-items-center
+                  span.completion.mr-2 90%
+                  div
+                    .progress
+                      .progress-bar.bg-info(role='progressbar' aria-valuenow='90' aria-valuemin='0' aria-valuemax='100' style='width: 90%;')
+              td.text-right
+                .dropdown
+                  a.btn.btn-sm.btn-icon-only.text-light(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+                    i.fas.fa-ellipsis-v
+                  .dropdown-menu.dropdown-menu-right.dropdown-menu-arrow
+                    a.dropdown-item(href='#') Action
+                    a.dropdown-item(href='#') Another action
+                    a.dropdown-item(href='#') Something else here
+            tr
+              th(scope='row')
+                .media.align-items-center
+                  a.avatar.rounded-circle.mr-3(href='#')
+                    img(alt='Image placeholder' src='img/theme/vue.jpg')
+                  .media-body
+                    span.name.mb-0.text-sm Vue Paper UI Kit PRO
+              td.budget
+                | $2200 USD
+              td
+                span.badge.badge-dot.mr-4
+                  i.bg-success
+                  span.status completed
+              td
+                .avatar-group
+                  a.avatar.avatar-sm.rounded-circle(href='#' data-toggle='tooltip' data-original-title='Ryan Tompson')
+                    img(alt='Image placeholder' src='img/theme/team-1.jpg')
+                  a.avatar.avatar-sm.rounded-circle(href='#' data-toggle='tooltip' data-original-title='Romina Hadid')
+                    img(alt='Image placeholder' src='img/theme/team-2.jpg')
+                  a.avatar.avatar-sm.rounded-circle(href='#' data-toggle='tooltip' data-original-title='Alexander Smith')
+                    img(alt='Image placeholder' src='img/theme/team-3.jpg')
+                  a.avatar.avatar-sm.rounded-circle(href='#' data-toggle='tooltip' data-original-title='Jessica Doe')
+                    img(alt='Image placeholder' src='img/theme/team-4.jpg')
+              td
+                .d-flex.align-items-center
+                  span.completion.mr-2 100%
+                  div
+                    .progress
+                      .progress-bar.bg-success(role='progressbar' aria-valuenow='100' aria-valuemin='0' aria-valuemax='100' style='width: 100%;')
+              td.text-right
+                .dropdown
+                  a.btn.btn-sm.btn-icon-only.text-light(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+                    i.fas.fa-ellipsis-v
+                  .dropdown-menu.dropdown-menu-right.dropdown-menu-arrow
+                    a.dropdown-item(href='#') Action
+                    a.dropdown-item(href='#') Another action
+                    a.dropdown-item(href='#') Something else here
+      // Card footer
+      .card-footer.py-4
+        nav(aria-label='...')
+          ul.pagination.justify-content-end.mb-0
+            li.page-item.disabled
+              a.page-link(href='#' tabindex='-1')
+                i.fas.fa-angle-left
+                span.sr-only Previous
+            li.page-item.active
+              a.page-link(href='#') 1
+            li.page-item
+              a.page-link(href='#')
+                | 2 
+                span.sr-only (current)
+            li.page-item
+              a.page-link(href='#') 3
+            li.page-item
+              a.page-link(href='#')
+                i.fas.fa-angle-right
+                span.sr-only Next
+
+      

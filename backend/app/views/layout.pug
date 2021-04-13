@@ -1,0 +1,49 @@
+doctype html
+head
+  meta(charset='utf-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
+  meta(name='description' content='Start your development with a Dashboard for Node.js.')
+  meta(name='author' content='Creative Tim')
+  title Argon Dashboard - Free Node.js Dashboard
+  // Favicon
+  link(href='img/brand/favicon.png' rel='icon' type='image/png')
+  // Fonts
+  link(href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet')
+  // Icons
+  link(href='vendor/nucleo/css/nucleo.css' rel='stylesheet')
+  link(href='vendor/@fortawesome/fontawesome-free/css/all.min.css' rel='stylesheet')
+  // Argon CSS
+  link(type='text/css' href='css/argon.min.css?v=1.0.0' rel='stylesheet')
+
+//- block scripts
+//- //-   script(src='/jquery.js')
+//- body
+//- block content
+//- block foot
+//-     #footer
+//-     p some footer content
+
+body
+  // Sidenav
+  include partials/sidebar.pug
+  // Main content
+  .main-content
+    // Top navbar
+    include partials/navbar.pug
+    // Header
+    block header
+      .header.bg-gradient-primary.pb-6
+        .container-fluid
+          include partials/header.pug
+    // Page content
+    .container-fluid.mt--6
+      .row
+        block content
+
+      // Footer
+      include partials/footer.pug
+
+  //- script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBd3PjUqq81lIOfBPYXrQGWwK5T4ystZjA')
+  // Include scripts
+  include partials/scripts.pug
+  block page_scripts 

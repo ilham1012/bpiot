@@ -11,6 +11,7 @@ module.exports = function(app) {
         next();
     });
 
+    // ----- API -----
     app.get("/api/v1/devices",  controller.api_findAll);
     app.get("/api/v1/devices/:id", controller.api_findById); //[authJwt.verifyToken]
     app.post("/api/v1/devices",  controller.api_create);
@@ -18,4 +19,9 @@ module.exports = function(app) {
     app.delete("/api/v1/devices/:id",  controller.api_delete);
 
     app.post("/api/v1/devices/token", [authJwt.verifyToken], auth.api_deviceGenerateToken);
+
+    // ----- VIEW -----
+    app.get("/projects", (req, res) => {
+        res.render('pages/projects', { title: 'Projects', message: 'Hello there!' })
+    });
 };

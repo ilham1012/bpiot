@@ -11,9 +11,15 @@ module.exports = function(app) {
         next();
     });
 
+    // ----- API -----
     app.get("/api/v1/projects",  controller.api_findAll);
     app.get("/api/v1/projects/:id", controller.api_findById); //[authJwt.verifyToken]
     app.post("/api/v1/projects",  controller.api_create);
     app.put("/api/v1/projects/:id",  controller.api_update);
     app.delete("/api/v1/projects/:id",  controller.api_delete);
+
+    // ----- VIEW -----
+    app.get("/devices", (req, res) => {
+        res.render('pages/devices', { title: 'Devices', message: 'Hello there!' })
+    });
 };

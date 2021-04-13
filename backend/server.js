@@ -16,6 +16,8 @@ app.use(helmet());
 app.use(bodyParser.json());
 // parse request of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
+// static files
+app.use(express.static('app/public'));
 
 
 
@@ -114,7 +116,7 @@ app.set('view engine', 'pug');
 
 // simple route
 app.get('/', (req, res) => {
-    res.render('index', { title: 'Hey', message: 'Hello there!' })
+    res.render('pages/index', { title: 'Hey', message: 'Hello there!' })
 });
 
 // require("./app/routes/tutorial.routes")(app);
