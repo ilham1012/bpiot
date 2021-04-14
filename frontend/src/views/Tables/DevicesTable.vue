@@ -22,12 +22,13 @@
         :class="type === 'dark' ? 'table-dark' : ''"
         :thead-classes="type === 'dark' ? 'thead-dark' : 'thead-light'"
         tbody-classes="list"
-        :data="projects"
+        :data="devices"
       >
         <template v-slot:columns>
-          <th>Project</th>
+          <th>Name</th>
           <th>UID</th>
           <th>Description</th>
+          <th>Token</th> 
           <th></th>
         </template>
 
@@ -43,10 +44,13 @@
             </div>
           </th>
           <td class="uid">
-            {{ row.item.project_uid }}
+            {{ row.item.uid }}
           </td>
           <td class="description">
             {{ row.item.description }}
+          </td>
+          <td class="token">
+            <input class="form-control" :value="row.item.token"/>
           </td>
 
           <td class="text-right">
@@ -72,11 +76,10 @@
   </div>
 </template>
 <script>
-import ProjectService from "../../services/project.service";
-var del = 0;
+import DeviceService from '../../services/device.service';
 
 export default {
-  name: "projects-table",
+  name: "devices-table",
   props: {
     type: {
       type: String,
@@ -85,7 +88,7 @@ export default {
   },
   data() {
     return {
-      projects: [],
+      devices: [],
       currentProject: null,
       currentIndex: -1,
       // title: "",
@@ -111,12 +114,12 @@ export default {
     };
   },
   methods: {
-    retrieveProjects() {
-      console.log("retrieve proj");
+    retrieveDevices() {
+      console.log("retrieve device");
 
-      ProjectService.getAll()
+      DeviceService.getAll()
         .then((response) => {
-          this.projects = response.data;
+          this.devices = response.data;
           console.log(response.data);
         })
         .catch((e) => {
@@ -124,18 +127,16 @@ export default {
         });
     },
     refreshList() {
-      this.retrieveProjects();
-      this.currentProject = null;
+      this.retrieveDevices();
+      this.currentDevice = null;
       this.currentIndex = -1;
     },
     deleteProject(id) {
-      del++;
-      console.log("Delete ", id, " ", del, "x");
 
-      ProjectService.delete(id)
+      DeviceService.delete(id)
         .then((response) => {
           console.log(response);
-          this.retrieveProjects();
+          this.retrieveDevices();
         })
         .catch((e) => {
           console.log(e);
@@ -143,7 +144,7 @@ export default {
     }
   },
   mounted() {
-    this.retrieveProjects();
+    this.retrieveDevices();
   },
 };
 </script>

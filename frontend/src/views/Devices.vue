@@ -12,7 +12,7 @@
           </nav>
         </div>
         <div class="col-lg-6 col-5 text-right">
-          <a href="#" class="btn btn-sm btn-neutral">New</a>
+          <base-button class="btn btn-sm btn-neutral" @click="modals.modal3 = true">New</base-button>
           <a href="#" class="btn btn-sm btn-neutral">Filters</a>
         </div>
       </div>
@@ -21,23 +21,84 @@
     <div class="container-fluid mt--7">
       <div class="row">
         <div class="col">
-          <projects-table title="Light Table"></projects-table>
-        </div>
-      </div>
-      <div class="row mt-5">
-        <div class="col">
-          <projects-table type="dark" title="Dark Table"></projects-table>
+          <devices-table title="Light Table"></devices-table>
         </div>
       </div>
     </div>
+
+    <modal v-model:show="modals.modal3"
+           body-classes="p-0"
+           modal-classes="modal-dialog-centered modal-sm">
+      <card type="secondary" shadow
+            header-classes="bg-white pb-5"
+            body-classes="px-lg-5 py-lg-5"
+            class="border-0">
+
+        <form role="form" name="form" @submit.prevent="createDevice">
+          <select name="" class="form-select" v-model="device.project_id">
+            <option v-for="(item , index) in projects" v-bind:key="index" :selected="index == 1" >
+              {{item.name}}
+            </option>
+          </select>
+          <base-input formClasses="input-group-alternative mb-3"
+                      placeholder="Device Name"
+                      addon-left-icon="ni ni-email-83"
+                      v-model="device.name">
+          </base-input>
+          <textarea class="form-control form-control-alternative"
+                    rows="2"
+                    placeholder="Device Description"
+                    v-model="device.description">
+          </textarea>
+          <div class="text-center">
+            <base-button type="primary" class="my-4" native-type="submit">Create Device</base-button>
+          </div>
+        </form>
+
+      </card>
+    </modal>
+
   </div>
 </template>
 <script>
-import ProjectsTable from "./Tables/ProjectsTable";
+import Device from "../models/device";
+import DevicesTable from "./Tables/DevicesTable";
+import ProjectService from "../services/project.service";
+
 export default {
   name: "devices",
+  data() {
+    return {
+      modals: {
+        modal3: false
+      },
+      projects: [],
+      device: new Device('',''),
+    }
+  },
   components: {
-    ProjectsTable,
+    DevicesTable,
+  },
+  methods: {
+    createDevice(){
+      console.log("Create Device");
+      console.log(this.device);
+    },
+    retrieveProjects() {
+      console.log("retrieve proj");
+
+      ProjectService.getAll()
+        .then((response) => {
+          this.projects = response.data;
+          console.log(response.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+  },
+  mounted() {
+    this.retrieveProjects();
   },
 };
 </script>

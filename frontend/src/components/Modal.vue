@@ -106,6 +106,8 @@ export default {
   },
   watch: {
     show(val) {
+      console.log("Modal: show()")
+      console.log(val);
       let documentClasses = document.body.classList;
       if (val) {
         documentClasses.add("modal-open");
