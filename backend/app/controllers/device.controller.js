@@ -109,7 +109,7 @@ device.api_findById = async (req, res) => {
 }
 
 device.api_findAll = async (req, res) => {
-    let result = await device.findAll(['uid', 'name', 'description', 'project_id']);
+    let result = await device.findAll(['id','uid', 'name', 'description', 'project_id', 'token']);
         
     if (result != null){
         return res.status(200).send(result);

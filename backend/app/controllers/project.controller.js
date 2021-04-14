@@ -161,7 +161,7 @@ project.api_findById = async (req, res) => {
     console.log(result);
 
     if (result != null){
-        return res.status(200).send({data: result});
+        return res.status(200).send(result);
     }
     
     return res.status(404).send({message: 'Project not found.'});
@@ -171,7 +171,7 @@ project.api_findAll = async (req, res) => {
     let result = await project.findAll();
 
     if (result != null){
-        return res.status(200).send({data: result});
+        return res.status(200).send(result);
     }
     
     return res.status(404).send({message: 'No project found.'});
