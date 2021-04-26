@@ -10,6 +10,7 @@ import Profile from "../views/UserProfile.vue";
 import Tables from "../views/Tables.vue";
 import Projects from "../views/Projects.vue";
 import Devices from "../views/Devices.vue";
+import DeviceDetail from "../views/DeviceDetail.vue";
 
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
@@ -54,6 +55,11 @@ const routes = [
         path: "/devices",
         name: "devices",
         components: { default: Devices },
+      },
+      {
+        path: "/device",
+        name: "device",
+        components: { default: DeviceDetail },
       },
     ],
   },
