@@ -14,9 +14,9 @@ module.exports = function(app) {
     // ----- API -----
     app.get("/api/v1/devices",  controller.api_findAll);
     app.get("/api/v1/devices/:id", controller.api_findById); //[authJwt.verifyToken]
-    app.post("/api/v1/devices",  controller.api_create);
-    app.put("/api/v1/devices/:id",  controller.api_update);
-    app.delete("/api/v1/devices/:id",  controller.api_delete);
+    app.post("/api/v1/devices", [authJwt.verifyToken], controller.api_create);
+    app.put("/api/v1/devices/:id", [authJwt.verifyToken], controller.api_update);
+    app.delete("/api/v1/devices/:id", [authJwt.verifyToken], controller.api_delete);
 
     app.post("/api/v1/devices/token", [authJwt.verifyToken], auth.api_deviceGenerateToken);
 

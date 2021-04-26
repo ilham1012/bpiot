@@ -99,6 +99,8 @@ exports.deviceGenerateToken = async (req) => {
 };
 
 exports.api_deviceGenerateToken = (req, res) => {
+    console.log("API_DEVICEGENTOKEN");
+    console.log(req);
     this.deviceGenerateToken(req)
             .then(result => { 
                 console.log(result);
