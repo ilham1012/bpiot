@@ -27,17 +27,17 @@
         <template v-slot:columns>
           <th>Name</th>
           <th>UID</th>
-          <th>Description</th>
+          <th>Project</th>
           <th>Token</th> 
-          <th></th>
+          <th>Action</th>
         </template>
 
         <template v-slot:default="row">
           <th scope="row">
             <div class="media align-items-center">
-              <a href="#" class="avatar rounded-circle mr-3">
+              <!-- <a href="#" class="avatar rounded-circle mr-3"> -->
                 <!-- <img alt="Image placeholder" :src="row.item.img" /> -->
-              </a>
+              <!-- </a> -->
               <div class="media-body">
                 <span class="name mb-0 text-sm">{{ row.item.name }}</span>
               </div>
@@ -46,11 +46,11 @@
           <td class="uid">
             {{ row.item.uid }}
           </td>
-          <td class="description">
-            {{ row.item.description }}
+          <td>
+            {{ row.item.project_id }}
           </td>
           <td class="token">
-            <input class="form-control" :value="row.item.token"/>
+            <base-button class="btn btn-sm btn-neutral" @click="showTokenModal(row.item)">See Token</base-button>
           </td>
 
           <td class="text-right">
@@ -67,15 +67,40 @@
       </base-table>
     </div>
 
-    <div
+    <!-- <div
       class="card-footer d-flex justify-content-end"
       :class="type === 'dark' ? 'bg-transparent' : ''"
     >
       <base-pagination total="30"></base-pagination>
-    </div>
+    </div> -->
+
+    <modal v-model:show="modals.modal_token"
+          ref="modal_token"
+          body-classes="p-0"
+          modal-classes="modal-dialog-centered modal-sm">
+
+      <card type="secondary" shadow
+            header-classes="bg-white pb-5"
+            body-classes="px-lg-5 py-lg-5"
+            class="border-0">
+        <div>
+          <h2>{{ currentDevice.name || "-" }}</h2>
+          <div><b>Device UID:</b> {{ currentDevice.uid || "-" }}</div>
+          <div><b>Device Token:</b></div>
+          <textarea class="form-control form-control-alternative" rows="3" :value="currentDevice.token"/>
+        </div>
+        <template v-slot:footer>
+          <base-button type="secondary" @click="modals.modal_token = false">Close</base-button>
+          <base-button type="primary" v-if="currentDevice.token == null" @click="generateToken(currentDevice)">Generate Token</base-button>
+          <base-button type="primary" v-if="currentDevice.token != null" >Copy Token</base-button>
+      </template>
+      </card>
+    </modal>
+
   </div>
 </template>
 <script>
+import Device from "../../models/device";
 import DeviceService from '../../services/device.service';
 
 export default {
@@ -89,8 +114,12 @@ export default {
   data() {
     return {
       devices: [],
-      currentProject: null,
-      currentIndex: -1,
+      currentDevice: new Device('',''),
+      modals: {
+        modal_token: false
+      },
+      // currentProject: null,
+      // currentIndex: -1,
       // title: "",
       //   {
       //     id: 1,
@@ -132,11 +161,25 @@ export default {
       this.currentIndex = -1;
     },
     deleteProject(id) {
-
       DeviceService.delete(id)
         .then((response) => {
           console.log(response);
           this.retrieveDevices();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    showTokenModal(device){
+      this.currentDevice = device;
+      this.modals.modal_token = true;
+    },
+    generateToken(device){
+      DeviceService.generateToken(device)
+        .then((response) => {
+          console.log(response);
+          this.currentDevice.token = response.data.accessToken;
+          // this.retrieveDevices();
         })
         .catch((e) => {
           console.log(e);

@@ -1,28 +1,33 @@
 import http from "../http-common";
+import authHeader from  "./auth-header";
 
 class DeviceService {
-    getAll() {
+    async getAll() {
         return http.get("/devices");
     }
 
-    get(id) {
+    async get(id) {
         return http.get(`/devices/${id}`);
     }
 
-    create(data) {
+    async create(data) {
         return http.post("/devices", {
             name: data.name,
-            project_id: data.project_id,
+            project_id: data.project.id,
             description: data.description,
-        });
+        }, { headers: authHeader() });
     }
 
-    update(id, data) {
-        return http.put(`/devices/${id}`, data);
+    async update(id, data) {
+        return http.put(`/devices/${id}`, data, { headers: authHeader() });
     }
 
-    delete(id) {
-        return http.delete(`/devices/${id}`);
+    async delete(id) {
+        return http.delete(`/devices/${id}`, { headers: authHeader() });
+    }
+
+    async generateToken(device) {
+        return http.post("/devices/token", device, { headers: authHeader() });
     }
 }
 

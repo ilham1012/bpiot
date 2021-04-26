@@ -1,7 +1,7 @@
 export default class Device {
-    constructor(name, project_id, description) {
+    constructor(name, project, description) {
       this.name = name;
-      this.project_id = project_id;
+      this.project = project;
       this.description = description;
     }
   }
