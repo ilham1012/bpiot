@@ -39,7 +39,11 @@
                 <!-- <img alt="Image placeholder" :src="row.item.img" /> -->
               <!-- </a> -->
               <div class="media-body">
-                <span class="name mb-0 text-sm">{{ row.item.name }}</span>
+                <span class="name mb-0 text-sm">
+                  <a v-bind:href="'#' + /device/ + row.item.id">
+                    {{ row.item.name }}
+                  </a>
+                </span>
               </div>
             </div>
           </th>

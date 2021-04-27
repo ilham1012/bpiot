@@ -57,7 +57,7 @@ const routes = [
         components: { default: Devices },
       },
       {
-        path: "/device",
+        path: "/device/:id",
         name: "device",
         components: { default: DeviceDetail },
       },

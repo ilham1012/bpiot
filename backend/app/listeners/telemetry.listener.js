@@ -27,7 +27,7 @@ module.exports.run = async function(opt){
             kafka_key = message.key.toString();
             kafka_msg = JSON.parse(message.value.toString());
 
-            console.log("=== TELE LISTENER ===");
+            console.log("=== TELEMETRY LISTENER ===");
             console.log({
                 key: kafka_key,
                 value: kafka_msg,

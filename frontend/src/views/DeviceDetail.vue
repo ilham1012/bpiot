@@ -26,7 +26,7 @@
               <div class="bg-white border-0">
                 <div class="row align-items-center">
                   <div class="col-8">
-                    <h3 class="mb-0">Device Information</h3>
+                    <h3 class="mb-0">Device Information {{$route.params.id}}</h3>
                   </div>
                   <div class="col-4 text-right">
                     <a href="#!" class="btn btn-sm btn-primary">Settings</a>
@@ -44,7 +44,7 @@
                       <b>Device name:</b>
                     </div>
                     <div>
-                      device name
+                      {{ device.name }}
                     </div>
                   </div>
                   <div class="col-md-4 mb-3">
@@ -52,16 +52,17 @@
                       <b>Device uid:</b>
                     </div>
                     <div>
-                      Device uid
+                      {{ device.uid }}
                     </div>
                   </div>
                   <div class="col-lg-12"><b>Device description:</b></div>
-                  <div class="col-md-8 mb-3">Device Description</div>
+                  <div class="col-md-8 mb-3">{{ device.description }}</div>
                   <div class="col-lg-12"><b>Device token:</b></div>
                   <div class="col-md-8 mb-3">
                     <textarea
                         rows="4"
                         class="form-control form-control-alternative"
+                        v-model="device.token"
                     ></textarea>
                   </div>
                 </div>
@@ -114,21 +115,35 @@
 </template>
 
 <script>
+import Device from "../models/device";
+import DeviceService from '../services/device.service';
+
 export default {
   name: "device-detail",
   data() {
     return {
-      
+      device: new Device("",""),
     };
   },
   computed: {
     
   },
   mounted() {
-    
+    this.retrieveDevice();
   },
   methods: {
-    
+    retrieveDevice() {
+      console.log("retrieve device");
+
+      DeviceService.get(this.$route.params.id)
+        .then((response) => {
+          this.device = response.data;
+          console.log(response.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
   }
 };
 </script>

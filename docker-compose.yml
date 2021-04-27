@@ -19,7 +19,6 @@ services:
 
   # kafka:
   #   image: 'bitnami/kafka:latest'
-  #   hostname: kafka.example.com
   #   ports:
   #     - '9092:9092'
   #     - '9094:9094'
@@ -44,8 +43,8 @@ services:
   #   environment:
   #     KAFKA_HOST: kafka:9092
   #   depends_on:
-  #     - broker
   #     - kafka
+  #     - broker
 
   # mqtt_kafka:
   #   build: ./mqtt_kafka
@@ -93,10 +92,12 @@ services:
   #     - 8080:8080
   #   depends_on:
   #     - backend
+  #   volumes:
+  #     - ./frontend:/code
 
   backend:
     build: ./backend
-    # restart: always
+    # restart: unless-stopped
     volumes:
       - ./backend:/code
     ports:
