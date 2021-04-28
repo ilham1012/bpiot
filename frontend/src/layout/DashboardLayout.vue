@@ -30,7 +30,7 @@
           }"
         />
 
-        <sidebar-item
+        <!-- <sidebar-item
           :link="{
             name: 'Icons',
             icon: 'ni ni-planet text-blue',
@@ -57,7 +57,7 @@
             icon: 'ni ni-bullet-list-67 text-red',
             path: '/tables',
           }"
-        />
+        /> -->
         <sidebar-item
           :link="{
             name: 'Login',

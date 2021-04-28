@@ -67,10 +67,10 @@
               <span>Support</span>
             </router-link>
             <div class="dropdown-divider"></div>
-            <a href="#!" class="dropdown-item">
+            <router-link to="/profile" class="dropdown-item" @click.prevent="logOut">
               <i class="ni ni-user-run"></i>
               <span>Logout</span>
-            </a>
+            </router-link>
           </base-dropdown>
         </ul>
       </slot>
@@ -166,10 +166,24 @@ export default {
     showSidebar() {
       this.$sidebar.displaySidebar(true);
     },
+    logOut() {
+      this.$store.dispatch('auth/logout');
+      this.$router.push('/login');
+    },
   },
   beforeUnmount() {
     if (this.$sidebar.showSidebar) {
       this.$sidebar.showSidebar = false;
+    }
+  },
+  computed: {
+    currentUser() {
+      return this.$store.state.auth.user;
+    }
+  },
+  mounted() {
+    if (!this.currentUser) {
+      this.$router.push('/login');
     }
   },
 };

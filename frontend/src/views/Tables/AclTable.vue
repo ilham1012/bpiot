@@ -1,9 +1,10 @@
 <template>
   <div>
+    <h5 class="pl-3 heading-small text-muted">{{ title }}</h5>
 
     <div class="table-responsive">
       <base-table
-        class="table align-items-center table-flush"
+        class="table align-items-center table-flush table-hover"
         :class="type === 'dark' ? 'table-dark' : ''"
         :thead-classes="type === 'dark' ? 'thead-dark' : 'thead-light'"
         tbody-classes="list"
@@ -36,8 +37,6 @@
   </div>
 </template>
 <script>
-import AclService from "../../services/acl.service";
-
 export default {
   name: "acl-table",
   props: {
@@ -45,28 +44,7 @@ export default {
       type: String,
     },
     title: String,
-  },
-  data() {
-    return {
-      acls: [], //new Acl("", ""),
-    };
-  },
-  methods: {
-    retrieveAcls() {
-      console.log("retrieve Acl");
-
-      AclService.get(this.$route.params.id)
-        .then((response) => {
-          this.acls = response.data;
-          console.log(response.data);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-  },
-  mounted() {
-    this.retrieveAcls();
+    acls: Array,
   },
 };
 </script>

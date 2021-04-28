@@ -26,7 +26,7 @@
               <div class="bg-white border-0">
                 <div class="row align-items-center">
                   <div class="col-8">
-                    <h3 class="mb-0">Device Information {{$route.params.id}}</h3>
+                    <h3 class="mb-0">Device Information</h3>
                   </div>
                   <div class="col-4 text-right">
                     <a href="#!" class="btn btn-sm btn-primary">Settings</a>
@@ -66,8 +66,9 @@
                         v-model="device.token"
                     ></textarea>
                   </div>
-                  <div class="col-md-4 mb-3">
-                    <base-button type="primary" size="sm" data-clipboard-target="#token_area">Copy Token</base-button>
+                  <div class="col-md-2 mb-3">
+                    <base-button type="primary" block size="sm" v-if="device.token == null" @click="generateToken(device)">Generate Token</base-button>
+                    <base-button type="primary" block size="sm" v-if="device.token != null" data-clipboard-target="#token_area">Copy Token</base-button>
                   </div>
                 </div>
                   
@@ -77,27 +78,48 @@
               <h6 class="heading-small text-muted mb-4">Project information</h6>
               <div class="pl-lg-4">
                 <div class="row">
-                  <div class="col-md-12">
-                    
+
+                  <div class="col-md-8 mb-3">
+                    <div>
+                      <b>Project name:</b>
+                    </div>
+                    <div>
+                      {{ device.project.name }}
+                    </div>
                   </div>
-                </div>
-                <div class="row">
-                  <div class="col-lg-4">
-                    
+                  
+                  <div class="col-md-4 mb-3">
+                    <div>                      
+                      <b>Project uid:</b>
+                    </div>
+                    <div>
+                      {{ device.project.uid }}
+                    </div>
                   </div>
-                  <div class="col-lg-4">
-                    
-                  </div>
-                  <div class="col-lg-4">
-                    
-                  </div>
+
+                  <div class="col-lg-12"><b>Project description:</b></div>
+                  <div class="col-md-8 mb-3">{{ device.project.description }}</div>
+                  
                 </div>
               </div>
               <hr class="my-4" />
               <!-- Description -->
-              <h6 class="heading-small text-muted mb-4">Access Control List</h6>
+              <h6 class="heading-small text-muted">MQTT Access Control</h6>
+              <div class="pl-lg-4 pr-lg-4">
+                <div class="row">
+                  <div class="col-md-8">
+                    <p class="text-muted small mb-4">
+                      Lists of MQTT Topic which the device have access to. 
+                    </p>
+                  </div>
+                  <div class="col-md-4 text-right">
+                    <base-button type="primary" size="sm">New ACL</base-button>
+                  </div>
+                </div>
+              </div>
               <div class="">
-                <acl-table></acl-table>
+                <acl-table title="Publish" :acls="pub_acls" class="mb-4"></acl-table>
+                <acl-table title="Subscribe" :acls="sub_acls" class="mb-2"></acl-table>
                 
               </div>
             </form>
@@ -128,10 +150,13 @@
 </template>
 
 <script>
-import BaseButton from '../components/BaseButton.vue';
+import BaseButton from "../components/BaseButton.vue";
+import AclTable from "./Tables/AclTable.vue";
+
+import DeviceService from "../services/device.service";
+import AclService from '../services/acl.service';
+
 import Device from "../models/device";
-import DeviceService from '../services/device.service';
-import AclTable from './Tables/AclTable.vue';
 
 export default {
   components: { BaseButton, AclTable },
@@ -139,6 +164,8 @@ export default {
   data() {
     return {
       device: new Device("",""),
+      pub_acls: [],
+      sub_acls: [],
     };
   },
   computed: {
@@ -146,6 +173,7 @@ export default {
   },
   mounted() {
     this.retrieveDevice();
+    this.retrieveAcls();
   },
   methods: {
     retrieveDevice() {
@@ -159,7 +187,40 @@ export default {
         .catch((e) => {
           console.log(e);
         });
-    }      
+    },
+
+    retrieveAcls() {
+      console.log("retrieve Acl");
+
+      AclService.get(this.$route.params.id)
+        .then((response) => {
+          const acls = response.data;
+
+          acls.forEach(acl => {
+            if (acl.pub){
+              this.pub_acls.push(acl);
+            } else {
+              this.sub_acls.push(acl);
+            }
+          });
+
+          console.log(response.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+
+    generateToken(device){
+      DeviceService.generateToken(device)
+        .then((response) => {
+          console.log(response);
+          this.device.token = response.data.accessToken;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
   }
 };
 </script>

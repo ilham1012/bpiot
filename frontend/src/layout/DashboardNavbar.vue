@@ -30,7 +30,7 @@
                 />
               </span>
               <div class="media-body ml-2 d-none d-lg-block">
-                <span class="mb-0 text-sm font-weight-bold">Jessica Jones</span>
+                <span class="mb-0 text-sm font-weight-bold">{{ currentUser.fullname || currentUser.username }}</span>
               </div>
             </div>
           </template>
@@ -54,7 +54,7 @@
             <span>Support</span>
           </router-link>
           <div class="dropdown-divider"></div>
-          <router-link to="/profile" class="dropdown-item">
+          <router-link to="/profile" class="dropdown-item" @click.prevent="logOut">
             <i class="ni ni-user-run"></i>
             <span>Logout</span>
           </router-link>
@@ -72,6 +72,16 @@ export default {
       searchQuery: "",
     };
   },
+  computed: {
+    currentUser() {
+      return this.$store.state.auth.user;
+    }
+  },
+  mounted() {
+    if (!this.currentUser) {
+      this.$router.push('/login');
+    }
+  },
   methods: {
     toggleSidebar() {
       this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
@@ -82,6 +92,10 @@ export default {
     toggleMenu() {
       this.showMenu = !this.showMenu;
     },
-  },
+    logOut() {
+      this.$store.dispatch('auth/logout');
+      this.$router.push('/login');
+    }
+  }
 };
 </script>

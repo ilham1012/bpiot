@@ -88,26 +88,6 @@ export default {
       projects: [],
       currentProject: null,
       currentIndex: -1,
-      // title: "",
-      //   {
-      //     id: 1,
-      //     name: "Coffee Roaster",
-      //     uid: "FFlBjQXwbb",
-      //     description: "Smart Coffee Roaster Project w/ Subang",
-      //   },
-      //   {
-      //     id: 2,
-      //     name: "Water Quality",
-      //     uid: "7f55FFlBjQ",
-      //     description: "Water Quality monitoring",
-      //   },
-      //   {
-      //     id: 3,
-      //     name: "Smart Health",
-      //     uid: "BjQ7f55FFl",
-      //     description: "Smart Health: monitoring",
-      //   },
-      // ],
     };
   },
   methods: {
