@@ -43,7 +43,7 @@
             </div>
           </th>
           <td class="uid">
-            {{ row.item.project_uid }}
+            {{ row.item.uid }}
           </td>
           <td class="description">
             {{ row.item.description }}

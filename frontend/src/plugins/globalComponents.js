@@ -19,8 +19,8 @@ import Tabs from "../components/Tabs/Tabs";
 
 // import VueNextSelect from 'vue-next-select';
 import VueformMultiselect from '@vueform/multiselect';
-
 import { ElTooltip, ElPopover } from "element-plus";
+import ClipboardJS from "clipboard";
 
 const GlobalComponents = {
   install(app) {
@@ -48,6 +48,7 @@ const GlobalComponents = {
 
     app.use(ElTooltip);
     app.use(ElPopover);
+    app.use(new ClipboardJS('.btn'));
   },
 };
 

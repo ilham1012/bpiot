@@ -91,12 +91,12 @@
           <h2>{{ currentDevice.name || "-" }}</h2>
           <div><b>Device UID:</b> {{ currentDevice.uid || "-" }}</div>
           <div><b>Device Token:</b></div>
-          <textarea class="form-control form-control-alternative" rows="3" :value="currentDevice.token"/>
+          <textarea id="token_area" class="form-control form-control-alternative" rows="3" :value="currentDevice.token"/>
         </div>
         <template v-slot:footer>
           <base-button type="secondary" @click="modals.modal_token = false">Close</base-button>
           <base-button type="primary" v-if="currentDevice.token == null" @click="generateToken(currentDevice)">Generate Token</base-button>
-          <base-button type="primary" v-if="currentDevice.token != null" >Copy Token</base-button>
+          <base-button type="primary" v-if="currentDevice.token != null" data-clipboard-target="#token_area">Copy Token</base-button>
       </template>
       </card>
     </modal>
