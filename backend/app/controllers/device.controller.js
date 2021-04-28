@@ -1,4 +1,5 @@
-const { nanoid } = require('nanoid');
+const { customAlphabet } = require('nanoid/non-secure');
+const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 10);
 
 const db = require("../models");
 const Project = db.project;
@@ -11,7 +12,7 @@ device.create = (project_id, device) => {
     console.log(device);
     return Device.create({
         project_id: project_id,
-        uid: nanoid(10),
+        uid: nanoid(),
         password: nanoid(12),
         name: device.name,
         description: device.description,

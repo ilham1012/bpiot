@@ -1,10 +1,8 @@
 const db = require("../models");
-// const { nanoid } = require('nanoid');
 const { customAlphabet } = require('nanoid/non-secure');
 const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 10);
 
 const Project = db.project;
-// const Device = db.device;
 const User = db.user;
 const project = {};
 
