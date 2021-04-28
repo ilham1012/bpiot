@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
     const Project = sequelize.define("projects", {
-      project_uid: {
+      uid: {
         type: Sequelize.STRING(10),
         allowNull: false,
         unique: true

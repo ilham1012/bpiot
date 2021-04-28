@@ -31,7 +31,7 @@ db.sequelize.authenticate().then(() => {
 
 
 // for development
-db.sequelize.sync();
+// db.sequelize.sync();
 // db.sequelize.sync({ force: true }).then(() => {
 //     db.sequelize.query("CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;");
 //     db.sequelize.query("SELECT create_hypertable('telemetries', 'time');");
@@ -40,13 +40,13 @@ db.sequelize.sync();
 //     initial().then(console.log("initial"));
 // });
 
-// db.sequelize.sync({ alter: true }).then(() => {
-//     // db.sequelize.query("CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;");
-//     // db.sequelize.query("SELECT create_hypertable('telemetries', 'time');");
+db.sequelize.sync({ alter: true }).then(() => {
+    // db.sequelize.query("CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;");
+    // db.sequelize.query("SELECT create_hypertable('telemetries', 'time');");
 
-//     // console.log("Drop and re-sync db.");
-//     // initial().then(console.log("initial"));
-// });
+    // console.log("Drop and re-sync db.");
+    // initial().then(console.log("initial"));
+});
 
 // const Role = db.role;
 const User = db.user;

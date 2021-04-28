@@ -1,5 +1,7 @@
 const db = require("../models");
-const { nanoid } = require('nanoid');
+// const { nanoid } = require('nanoid');
+const { customAlphabet } = require('nanoid/non-secure');
+const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 10);
 
 const Project = db.project;
 // const Device = db.device;
@@ -8,11 +10,11 @@ const project = {};
 
 project.create = async (project) => {
     var same_uid = true;
-    var uid = nanoid(10);
+    var uid = nanoid();
     
     while(same_uid){
         uid = nanoid(10);
-        let project = await Project.findOne({where: {project_uid: uid}});
+        let project = await Project.findOne({where: {uid: uid}});
         
         console.log("find uid ");
         console.log(project);
@@ -25,7 +27,7 @@ project.create = async (project) => {
     console.log("uid: ", uid);
 
     return Project.create({
-        project_uid: nanoid(10),
+        uid: nanoid(10),
         name: project.name,
         description: project.description,
     })
