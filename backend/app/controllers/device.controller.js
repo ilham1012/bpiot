@@ -3,6 +3,7 @@ const { nanoid } = require('nanoid');
 const db = require("../models");
 const Project = db.project;
 const Device = db.device;
+const ACL = require("../controllers/acl.controller");
 
 const device = {};
 
@@ -16,6 +17,22 @@ device.create = (project_id, device) => {
         description: device.description,
     })
         .then((device) => {
+            // create default ACL
+            Project.findByPk(project_id)
+                .then(async(project) => {
+                    pattern = project.uid + "/#/" + device.uid;
+                    // pub
+                    await ACL.create(device.id, {
+                        pub: true,
+                        pattern: pattern
+                    });
+
+                    await ACL.create(device.id, {
+                        pub: false,
+                        pattern: pattern
+                    });
+                });
+
             console.log(">> Created device: " + JSON.stringify(device, null, 4));
             return device;
         })

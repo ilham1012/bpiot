@@ -11,11 +11,11 @@ module.exports = function(app) {
         next();
     });
 
-    app.get("/api/v1/acl",  controller.api_findAll);
-    app.get("/api/v1/acl/:id", controller.api_findById); //[authJwt.verifyToken]
-    app.post("/api/v1/acl",  controller.api_create);
-    app.put("/api/v1/acl/:id",  controller.api_update);
-    app.delete("/api/v1/acl/:id",  controller.api_delete);
+    app.get("/api/v1/acl",  [authJwt.verifyToken], controller.api_findAll);
+    app.get("/api/v1/acl/:id", [authJwt.verifyToken], controller.api_findById); //[authJwt.verifyToken]
+    app.post("/api/v1/acl", [authJwt.verifyToken], controller.api_create);
+    app.put("/api/v1/acl/:id", [authJwt.verifyToken], controller.api_update);
+    app.delete("/api/v1/acl/:id", [authJwt.verifyToken], controller.api_delete);
 
     app.post("/api/v1/auth/mqtt", [authJwt.verifyToken], controller.mqttAuth);
 };
