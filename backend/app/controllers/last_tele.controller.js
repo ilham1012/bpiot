@@ -56,7 +56,8 @@ last_tele.findById = (id) => {
 };
 
 last_tele.findAll = (device_id) => {    
-    return LastTele.findAll({where: {device_id: device_id}})
+    console.log("zzzzzzzzzz");
+    return LastTele.findAll({where: {device_id: device_id}, include: "key" })
         .then((teles) => {
             return teles;
         }).catch((err) => {
@@ -81,7 +82,7 @@ last_tele.findAll = (device_id) => {
 // }
 
 last_tele.api_findById = async (req, res) => {
-    let result = await LastTele.findById(req.params.id);
+    let result = await last_tele.findById(req.params.id);
 
     if (result != null){
         return res.status(200).send(result);
@@ -90,17 +91,20 @@ last_tele.api_findById = async (req, res) => {
     return res.status(404).send({message: 'last tele not found.'});
 }
 
-last_tele.api_findAll = async (req, res) => {
-    let device = await db.device.findOne({where: {uid: req.params.device_uid}});
-    let result = await db.last_tele.findAll({where: {device_id: device.id}});
+last_tele.api_findAll = async (req, res) => {  
+    console.log("zzzzzzzzzz");
+    // let device = await db.device.findOne({where: {uid: req.params.device_uid}});
+    let result = await last_tele.findAll(req.params.id);
 
-    console.log("Device id: " + device.id);
+    console.log(result);
+
+    
 
     if (result != null){
         return res.status(200).send(result);
     }
 
-    return res.status(404).send({message: 'last telemetry not found for device: ' + req.params.deviceid});
+    return res.status(404).send({message: 'last telemetry not found for device: ' + req.params.device_uid});
 }
 
 module.exports = last_tele;

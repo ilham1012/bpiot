@@ -87,22 +87,22 @@ db.telemetry_key.hasMany(db.telemetry, {
 // DEVICE 1--n LAST_TELEMETRY 
 db.last_tele.belongsTo(db.device, {
     foreignKey: 'device_id',
-    as: 'last_tele_device'
+    as: 'device'
 });
 db.device.hasMany(db.last_tele, {
     foreignKey: 'device_id',
-    as: 'device_last_tele'
+    as: 'last_tele'
 });
 
 
 // TELEMETRY_KEY 1--n LAST_TELEMETRY 
 db.last_tele.belongsTo(db.telemetry_key, {
     foreignKey: 'key_id',
-    as: 'last_tele_key'
+    as: 'key'
 });
 db.telemetry_key.hasMany(db.last_tele, {
     foreignKey: 'key_id',
-    as: 'key_last_tele'
+    as: 'last_tele'
 });
 
 
