@@ -5,6 +5,7 @@ const db = require("../models");
 const Project = db.project;
 const Device = db.device;
 const ACL = require("../controllers/acl.controller");
+const { Op } = require("sequelize");
 
 const device = {};
 
@@ -19,20 +20,22 @@ device.create = (project_id, device) => {
     })
         .then((device) => {
             // create default ACL
-            Project.findByPk(project_id)
-                .then(async(project) => {
-                    pattern = project.uid + "/#/" + device.uid;
-                    // pub
-                    await ACL.create(device.id, {
-                        pub: true,
-                        pattern: pattern
+            if (project_id) {
+                Project.findByPk(project_id)
+                    .then(async(project) => {
+                        pattern = project.uid + "/#";
+                        // pub
+                        await ACL.create(device.id, {
+                            pub: true,
+                            pattern: pattern
+                        });
+    
+                        await ACL.create(device.id, {
+                            pub: false,
+                            pattern: pattern
+                        });
                     });
-
-                    await ACL.create(device.id, {
-                        pub: false,
-                        pattern: pattern
-                    });
-                });
+            }
 
             console.log(">> Created device: " + JSON.stringify(device, null, 4));
             return device;
@@ -54,7 +57,10 @@ device.findById = (id) => {
 };
 
 device.findAll = (attr) => {
-    return Device.findAll({attributes: attr})
+    console.log("----------------- DEVICE FIND -------------");
+    console.log(attr);
+
+    return Device.findAll({attributes: attr, where: {id: {[Op.ne]: 1}}})
         .then((devices) => {
             return devices;
         });

@@ -27,6 +27,7 @@ db.project = require("./project.model.js")(sequelize, Sequelize);
 db.device = require("./device.model.js")(sequelize, Sequelize);
 db.acl = require("./acl.model.js")(sequelize, Sequelize);
 db.telemetry = require("./telemetry.model.js")(sequelize, Sequelize);
+db.last_tele = require("./last_tele.model.js")(sequelize, Sequelize);
 db.telemetry_key = require("./telemetry_key.model.js")(sequelize, Sequelize);
 
 // PROJECT 1--n DEVICE 
@@ -80,6 +81,28 @@ db.telemetry.belongsTo(db.telemetry_key, {
 db.telemetry_key.hasMany(db.telemetry, {
     foreignKey: 'key_id',
     as: 'key_telemetry'
+});
+
+
+// DEVICE 1--n LAST_TELEMETRY 
+db.last_tele.belongsTo(db.device, {
+    foreignKey: 'device_id',
+    as: 'last_tele_device'
+});
+db.device.hasMany(db.last_tele, {
+    foreignKey: 'device_id',
+    as: 'device_last_tele'
+});
+
+
+// TELEMETRY_KEY 1--n LAST_TELEMETRY 
+db.last_tele.belongsTo(db.telemetry_key, {
+    foreignKey: 'key_id',
+    as: 'last_tele_key'
+});
+db.telemetry_key.hasMany(db.last_tele, {
+    foreignKey: 'key_id',
+    as: 'key_last_tele'
 });
 
 

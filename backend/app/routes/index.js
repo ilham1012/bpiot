@@ -4,4 +4,5 @@ module.exports = (app) => {
     require("./device.routes")(app);
     require("./acl.routes")(app);
     require("./project.routes")(app);
+    require("./telemetry.routes")(app);
 }

@@ -66,6 +66,32 @@ async function initial() {
         role: db.USER_ROLES.ADMIN
     });
 
+    await DeviceController.create(null, {
+        name: "internal",
+        description: "for internal listener."
+    }).then(async (newDevice) => {
+        await ACLController.create(newDevice.id, {
+            pub: true,
+            pattern: "#"
+        });
+
+        await ACLController.create(newDevice.id, {
+            pub: false,
+            pattern: "#"
+        });
+
+        await AuthController.deviceGenerateToken(
+            {
+                body: {
+                    uid: newDevice.uid
+                }
+            },
+            {
+                status: 404
+            }
+        );
+    });
+
     // create 1st project
     await ProjectController.create({
         name: "test project",
@@ -75,35 +101,14 @@ async function initial() {
         // add 1st user as project 1 user
         await ProjectController.addUser(newProject.id, 1);
 
-        // create 1st device, belong to 1st project
+        // create test device, belong to 1st project
         await DeviceController.create(1, {
             name: "test device",
             description: "test device desc."
-        }).then(async (newDevice) => {
-            await ACLController.create(newDevice.id, {
-                pub: true,
-                pattern: "#"
-            });
-
-            await ACLController.create(newDevice.id, {
-                pub: false,
-                pattern: "#"
-            });
-
-            await AuthController.deviceGenerateToken(
-                {
-                    body: {
-                        uid: newDevice.uid
-                    }
-                },
-                {
-                    status: 404
-                }
-            );
-
         });
 
     });
+    
     
     // console.log(await ProjectController.findAll());
 
@@ -123,7 +128,7 @@ app.get('/', (req, res) => {
 require("./app/routes/index")(app);
 
 
-// const Listener = require('./app/listeners');
+const Listener = require('./app/listeners');
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

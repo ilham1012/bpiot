@@ -1,5 +1,6 @@
 const { Kafka } = require('kafkajs');
 const db = require("../models");
+const LastTele = require("../controllers/last_tele.controller");
 
 module.exports.run = async function(opt){
     const kafka = new Kafka({
@@ -94,16 +95,18 @@ module.exports.run = async function(opt){
                 return false;                
             }
 
-            row.telemetryDeviceId = device.id;
+            row.device_id = device.id;
             
             // insert key, but it needs to be the key_id
             // make a query to telemetry_key or create new if not exist
             const [telemetry_key, created] = await db.telemetry_key.findOrCreate({ where: { key: keys[i] } });
-            row.telemetryKeyId = telemetry_key.id;
+            row.key_id = telemetry_key.id;
 
             const value = payload.data[keys[i]];
             row[checkType(value)] = value;
             data.push(row);
+
+            LastTele.create(row);
         }
 
 
