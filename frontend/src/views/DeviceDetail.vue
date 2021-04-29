@@ -141,6 +141,10 @@
               </div>
             </template>
 
+            <div >
+              <last-tele-table :tele="last_teles"></last-tele-table>
+            </div>
+
           </card>
         </div>
       </div>
@@ -154,42 +158,57 @@ import BaseButton from "../components/BaseButton.vue";
 import AclTable from "./Tables/AclTable.vue";
 
 import DeviceService from "../services/device.service";
+import TelemetryService from "../services/telemetry.service";
 import AclService from '../services/acl.service';
 
 import Device from "../models/device";
+import LastTeleTable from './Tables/LastTeleTable.vue';
 
 export default {
-  components: { BaseButton, AclTable },
+  components: { BaseButton, AclTable, LastTeleTable },
   name: "device-detail",
   data() {
     return {
       device: new Device("",""),
       pub_acls: [],
       sub_acls: [],
+      last_teles: [],
     };
   },
   computed: {
     
   },
-  mounted() {
-    this.retrieveDevice();
-    this.retrieveAcls();
+  async mounted() {
+    this.retrieveDevice()
+      .then(this.retrieveAcls())
+      .then(this.retrieveLastTele());
   },
   methods: {
-    retrieveDevice() {
+    async retrieveDevice() {
       console.log("retrieve device");
 
       DeviceService.get(this.$route.params.id)
         .then((response) => {
           this.device = response.data;
-          console.log(response.data);
+          console.log(this.device);
         })
         .catch((e) => {
           console.log(e);
         });
     },
 
-    retrieveAcls() {
+    async retrieveLastTele() {
+      TelemetryService.getAllLast(this.$route.params.id)
+        .then((response) => {
+          this.last_teles = response;
+          console.log(this.last_teles)
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+
+    async retrieveAcls() {
       console.log("retrieve Acl");
 
       AclService.get(this.$route.params.id)
@@ -204,14 +223,13 @@ export default {
             }
           });
 
-          console.log(response.data);
         })
         .catch((e) => {
           console.log(e);
         });
     },
 
-    generateToken(device){
+    async generateToken(device){
       DeviceService.generateToken(device)
         .then((response) => {
           console.log(response);
