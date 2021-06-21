@@ -17,6 +17,7 @@ services:
       ZOO_SERVER_USERS: kafka
       ZOO_SERVER_PASSWORDS: kafka_password
 
+      
   kafka:
     image: 'bitnami/kafka:latest'
     ports:
@@ -33,6 +34,7 @@ services:
     depends_on:
       - zookeeper
 
+
   mk_bridge:
     build: ./mk_bridge
     restart: unless-stopped
@@ -46,6 +48,7 @@ services:
       - kafka
       - broker
 
+
   # mqtt_kafka:
   #   build: ./mqtt_kafka
   #   restart: unless-stopped
@@ -55,6 +58,7 @@ services:
   #     - 3967:3967
   #   # depends_on:
   #   #   - kafka
+
 
   broker:
     image: vernemq/vernemq
@@ -72,6 +76,7 @@ services:
     volumes:
       - ./broker/auth_http.lua:/auth_http.lua
   
+
   # auth:
   #   build: ./jwt
   #   restart: unless-stopped
@@ -80,11 +85,13 @@ services:
   #   ports:
   #     - 3000:3000 
 
+
   # transport:
   #   container_name: transport
   #   image: rabbitmq:3.8.14-management
   #   restart: unless-stopped
   #   hostname: rabbit
+
 
   # frontend:
   #   build: ./frontend
@@ -94,6 +101,7 @@ services:
   #     - backend
   #   volumes:
   #     - ./frontend:/code
+
 
   backend:
     build: ./backend
@@ -114,6 +122,7 @@ services:
       - db
       # - mk_bridge
 
+
   db:
     image: "timescale/timescaledb:2.1.0-pg12"
     ports:
@@ -123,6 +132,7 @@ services:
       POSTGRES_PASSWORD: testpass
     volumes:
       - ./db/data:/var/lib/postgresql/data
+
 
   # tsdb:
   #   image: "influxdb:2.0-alpine"
