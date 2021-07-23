@@ -89,6 +89,8 @@ export default {
       console.log(this.project);
       ProjectService.create(this.project)
         .then(() => {
+          this.project.name = "";
+          this.project.description = "";
           this.$refs.modal_new_project.closeModal();
           this.$refs.projectTable.retrieveProjects();
         });
