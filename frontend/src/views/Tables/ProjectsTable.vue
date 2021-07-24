@@ -86,7 +86,7 @@
 
         <form role="form" name="form" @submit.prevent="updateProject">          
           <base-input formClasses="input-group-alternative mb-3"
-                      placeholder="Project Name"
+                      placeholder="Project Name *"
                       addon-left-icon="ni ni-email-83"
                       v-model="project.name">
           </base-input>
@@ -96,7 +96,9 @@
                     v-model="project.description">
           </textarea>
           <div class="text-center">
-            <base-button type="primary" class="my-4" native-type="submit">Update Project</base-button>
+            <base-button type="primary" class="my-4" native-type="submit" v-bind:disabled="project.name == 0">
+              Update Project
+            </base-button>
           </div>
         </form>
 
@@ -112,12 +114,15 @@
             body-classes="px-lg-5 py-lg-5"
             class="border-0">
       
-          <h3 class="modal-title mb-3" id="modal-title-default">Delete Project?</h3>
-          <form role="form" name="form" @submit.prevent="deleteProject">
-            <div class="text-center">
-              <base-button type="danger" class="my-4" native-type="submit">Delete</base-button>
-            </div>
-          </form>
+          <h3 class="modal-title mb-3 text-center" id="modal-title-default">Delete Project?</h3>
+          <div class="text-center">
+            <base-button block type="danger" class="my-4" native-type="submit" @click="deleteProject">
+              Delete
+            </base-button>
+            <base-button block type="secondary" class="my-4" @click="this.$refs.modal_delete_project.closeModal()">
+              Cancel
+            </base-button>
+          </div>
       </card>
     </modal>
 
