@@ -107,23 +107,23 @@
 
     <modal v-model:show="modals.delete_project"
            ref="modal_delete_project"
-           body-classes="p-0"
-           modal-classes="modal-dialog-centered modal-sm">
-      <card type="secondary" shadow
-            header-classes="bg-white pb-5"
-            body-classes="px-lg-5 py-lg-5"
-            class="border-0">
+           gradient="danger"
+           modal-classes="modal-danger modal-dialog-centered">
       
-          <h3 class="modal-title mb-3 text-center" id="modal-title-default">Delete Project?</h3>
-          <div class="text-center">
-            <base-button block type="danger" class="my-4" native-type="submit" @click="deleteProject">
-              Delete
-            </base-button>
-            <base-button block type="secondary" class="my-4" @click="this.$refs.modal_delete_project.closeModal()">
-              Cancel
-            </base-button>
-          </div>
-      </card>
+      <template v-slot:header>
+        <h5 class="modal-title" id="modal-title-default">Delete Project</h5>
+      </template>
+      <div class="py-3 text-center">
+        <p>Are you sure to delete this project?</p>
+      </div>
+      <template v-slot:footer>
+        <base-button type="link" text-color="white" class="mr-auto" @click="modals.delete_project = false">
+          Cancel
+        </base-button>
+        <base-button type="white" @click="deleteProject">
+          Delete
+        </base-button>
+      </template>
     </modal>
 
     <!-- <div

@@ -37,10 +37,11 @@
               <div class="col-lg-4">
                 <base-input
                   alternative=""
+                  disabled
                   label="Username"
                   placeholder="Username"
                   input-classes="form-control-alternative"
-                  v-model="currentUser.username"
+                  v-model="model.username"
                 />
               </div>
               <div class="col-lg-2 align-self-center">
@@ -51,22 +52,39 @@
               <div class="col-lg-6">
                 <base-input
                   alternative=""
+                  disabled
                   label="Email address"
                   placeholder="jesse@example.com"
                   input-classes="form-control-alternative"
-                  v-model="currentUser.email"
+                  v-model="model.email"
                 />
               </div>
             </div>
             <div class="row">
-              <div class="col-lg-12">
+              <div class="col-lg-8">
                 <base-input
                   alternative=""
+                  disabled
                   label="Full name"
                   placeholder="Full name"
                   input-classes="form-control-alternative"
-                  v-model="currentUser.firstName"
+                  v-model="currentUser.full_name"
                 />
+              </div>
+              <div class="col-lg-2">
+                <base-input
+                  alternative=""
+                  label="Role"
+                  placeholder="Role"
+                  input-classes="form-control-alternative"
+                  disabled
+                  v-model="currentUser.role"
+                />
+              </div>
+              <div class="col-lg-2 align-self-center">
+                <base-button type="primary" @click="editProfileModal()">
+                  Edit profil
+                </base-button>
               </div>
             </div>
           </div>
@@ -81,10 +99,12 @@
       <div class="text-center">
         <base-input formClasses="input-group-alternative mb-3"
                     placeholder="Password baru"
+                    type="password"
                     v-model="model.pass">
         </base-input>
         <base-input formClasses="input-group-alternative mb-3"
                     placeholder="Ulangi password baru"
+                    type="password"
                     v-model="model.confirmPass">
         </base-input>
       </div>
@@ -94,12 +114,42 @@
       </template>
     </modal>
 
+    <modal v-model:show="modals.profile_edit">
+      <template v-slot:header>
+        <h5 class="modal-title">Edit Profil</h5>
+      </template>
+      <div>
+        <form role="form">
+          <base-input formClasses="input-group-alternative mb-3"
+                    label="Username"
+                    placeholder="Username"
+                    v-model="edit.username">
+          </base-input>
+          <base-input formClasses="input-group-alternative mb-3"
+                      label="Email"
+                      placeholder="Email"
+                      v-model="edit.email">
+          </base-input>
+          <base-input formClasses="input-group-alternative mb-3"
+                      label="Full Name"
+                      placeholder="Full Name"
+                      v-model="edit.fullName">
+          </base-input>
+        </form>
+      </div>
+      <template v-slot:footer>
+        <base-button type="secondary" @click="modals.profile_edit = false">Batal</base-button>
+        <base-button type="primary">Update</base-button>
+      </template>
+    </modal>
+
   </div>
 </template>
 <script>
+import BaseButton from '../components/BaseButton.vue';
 import BaseInput from '../components/BaseInput.vue';
 export default {
-  components: { BaseInput },
+  components: { BaseInput, BaseButton },
   name: "user-profile",
   data() {
     return {
@@ -108,16 +158,16 @@ export default {
         email: "",
         pass: "",
         confirmPass: "",
-        firstName: "",
-        lastName: "",
-        address: "",
-        city: "",
-        country: "",
-        zipCode: "",
-        about: "",
+        fullName: ""
+      },
+      edit: {
+        username: "",
+        email: "",
+        fullName: ""
       },
       modals: {
-        change_password: false
+        change_password: false,
+        profile_edit: false
       }
     };
   },
@@ -130,11 +180,22 @@ export default {
     if (!this.currentUser) {
       this.$router.push('/login');
     }
+    this.retrieveProfile();
   },
   methods: {
     logOut() {
       this.$store.dispatch('auth/logout');
       this.$router.push('/login');
+    },
+    retrieveProfile() {
+      this.model.username = this.currentUser.username;
+      this.model.email = this.currentUser.email;
+    },
+    editProfileModal() {
+      this.edit.username = this.model.username;
+      this.edit.email = this.model.email;
+      this.edit.fullName = this.model.fullName;
+      this.modals.profile_edit = true;
     }
   }
 };

@@ -60,20 +60,36 @@
         </div>
         <div class="col-6 text-right">
           <router-link to="/register" class="text-light"
-            ><small>Create new account {{ message }}</small></router-link
+            ><small>Create new account</small></router-link
           >
         </div>
       </div>
+
+    <div>
+      <modal v-model:show="modals.fail">
+        <template v-slot:header>
+            <h5 class="modal-title">Login Gagal</h5>
+          </template>
+          <p>Login gagal dengan pesan "{{ message }}"</p>
+          <template v-slot:footer>
+            <base-button type="link" @click="modals.fail = false">
+              Close
+            </base-button>
+          </template>
+      </modal>
+    </div>
     </div>
   </div>
 </template>
 <script>
+import Modal from '../components/Modal.vue';
 import User from '../models/user';
 // import { Field, Form, ErrorMessage } from 'vee-validate';
 
 
 
 export default {
+  components: { Modal },
   // components: {
   //   Field,
   //   Form,
@@ -93,7 +109,10 @@ export default {
     return {
       user: new User('', ''),
       loading: false,
-      message: ''
+      message: '',
+      modals: {
+        fail: false
+      }
     };
   },
   computed: {
@@ -125,10 +144,8 @@ export default {
             },
             error => {
               this.loading = false;
-              this.message =
-                (error.response && error.response.data) ||
-                error.message ||
-                error.toString();
+              this.message = error.response.data.message;
+              this.modals.fail = true;
             }
           );
         }
