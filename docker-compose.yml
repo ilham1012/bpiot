@@ -11,6 +11,7 @@ services:
 
   zookeeper:
     image: 'bitnami/zookeeper:latest'
+    restart: unless-stopped
     ports:
      - '2181:2181'
     environment:
@@ -21,6 +22,7 @@ services:
       
   kafka:
     image: 'bitnami/kafka:latest'
+    restart: unless-stopped
     ports:
       - '9092:9092'
       - '9094:9094'
@@ -106,7 +108,7 @@ services:
 
   backend:
     build: ./backend
-    # restart: unless-stopped
+    restart: unless-stopped
     volumes:
       - ./backend:/code
     ports:
@@ -126,6 +128,7 @@ services:
 
   db:
     image: "timescale/timescaledb:2.1.0-pg12"
+    restart: unless-stopped
     ports:
       - 5432:5432
     environment:

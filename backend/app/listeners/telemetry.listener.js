@@ -3,6 +3,8 @@ const db = require("../models");
 const LastTele = require("../controllers/last_tele.controller");
 
 module.exports.run = async function(opt){
+    // console.log("=== TELEMETRY.LISTENER.js ===");
+
     const kafka = new Kafka({
         clientId: opt.clientId,
         brokers: opt.brokers

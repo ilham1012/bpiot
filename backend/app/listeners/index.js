@@ -5,6 +5,8 @@ const lstnr = {};
 
 lstnr.telemetry = require("./telemetry.listener.js");
 
+// console.log("listener index");
+
 lstnr.telemetry.run({
     brokers: [process.env.KAFKA_HOST || 'kafka:9092'],
     clientId: 'telemetry-save',

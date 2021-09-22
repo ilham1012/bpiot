@@ -19,6 +19,7 @@
     "google-maps": "4.3.3",
     "moment": "^2.29.1",
     "nouislider": "14.6.0",
+    "sass": "^1.41.1",
     "vee-validate": "^4.3.0",
     "vue": "^3.0.0",
     "vue-next-select": "^2.1.1",

@@ -8,7 +8,7 @@ module.exports = {
         options: {
             clientId: "example-client",
             username: "example",
-            password: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjI0MjQzMjk1fQ.8-g4NurhJoOBnRK_dHc89nmqt2_T5d8YAQEKmES56Us",
+            password: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjMyMTA3NjI0fQ.HO_KrqXH537meO6HjodRpzp916fejMrTc2E1nIPphF0",
             host: "broker",
             port: 1883,
             protocolId: "MQTT",
