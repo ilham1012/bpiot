@@ -46,7 +46,7 @@
 
         <form role="form" name="form" @submit.prevent="createProject">          
           <base-input formClasses="input-group-alternative mb-3"
-                      placeholder="Project Name"
+                      placeholder="Project Name *"
                       addon-left-icon="ni ni-email-83"
                       v-model="project.name">
           </base-input>
@@ -56,7 +56,10 @@
                     v-model="project.description">
           </textarea>
           <div class="text-center">
-            <base-button type="primary" class="my-4" native-type="submit">Create Project</base-button>
+            <base-button id="btnCreateProject" type="primary" class="my-4" native-type="submit" 
+            v-bind:disabled="project.name == 0">
+              Create Project
+            </base-button>
           </div>
         </form>
 
@@ -89,6 +92,8 @@ export default {
       console.log(this.project);
       ProjectService.create(this.project)
         .then(() => {
+          this.project.name = "";
+          this.project.description = "";
           this.$refs.modal_new_project.closeModal();
           this.$refs.projectTable.retrieveProjects();
         });

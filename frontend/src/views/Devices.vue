@@ -71,7 +71,7 @@
                     v-model="device.description">
           </textarea>
           <div class="text-center">
-            <base-button type="primary" class="my-4" native-type="submit">Create Device</base-button>
+            <base-button type="primary" class="my-4" native-type="submit" v-bind:disabled="device.name == 0">Create Device</base-button>
           </div>
         </form>
 
@@ -93,6 +93,7 @@ export default {
       modals: {
         new_device: false
       },
+     
       projects: [],
       device: new Device("",""),
     }

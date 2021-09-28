@@ -59,17 +59,8 @@
               >
             </div>
 
-            <div class="row my-4">
-              <div class="col-12">
-                <base-checkbox class="custom-control-alternative">
-                  <span class="text-muted"
-                    >I agree with the <a href="#!">Privacy Policy</a></span
-                  >
-                </base-checkbox>
-              </div>
-            </div>
             <div class="text-center">
-              <base-button type="primary" class="my-4" native-type="submit"
+              <base-button type="primary" class="my-4" native-type="submit" v-bind:disabled="user.username == 0"
                 >Create account</base-button
               >
             </div>
@@ -84,9 +75,37 @@
         </div>
         <div class="col-6 text-right">
           <router-link to="/login" class="text-light">
-            <small>Login into your account {{ user.username }}</small>
+            <small>Login into your account</small>
           </router-link>
         </div>
+      </div>
+
+      <div>
+        <modal v-model:show="modals.successful">
+          <template v-slot:header>
+            <h5 class="modal-title">Register Sukses</h5>
+          </template>
+          <p>Register berhasil dengan username {{ user.username }}</p>
+          <template v-slot:footer>
+            <base-button type="link" @click="modals.successful = false">
+              Close
+            </base-button>
+          </template>
+        </modal>
+      </div>
+
+      <div>
+        <modal v-model:show="modals.fail">
+          <template v-slot:header>
+            <h5 class="modal-title">Register Gagal</h5>
+          </template>
+          <p>Register gagal dengan pesan "{{ message }}"</p>
+          <template v-slot:footer>
+            <base-button type="link" @click="modals.fail = false">
+              Close
+            </base-button>
+          </template>
+        </modal>
       </div>
     </div>
   </div>
@@ -98,14 +117,12 @@ export default {
   name: "register",
   data() {
     return {
-      // model: {
-      //   name: "",
-      //   email: "",
-      //   password: "",
-      // },
       user: new User('', '', ''),
+      modals : {
+        successful: false,
+        fail: false
+      },
       submitted: false,
-      successful: false,
       message: ''
     };
   },
@@ -129,13 +146,11 @@ export default {
           this.$store.dispatch('auth/register', this.user).then(
             data => {
               this.message = data.message;
-              this.successful = true;
+              this.modals.successful = true;
             },
             error => {
-              this.message = 
-                (error.response && error.response.data) ||
-                error.message || error.toString();
-              this.successful = false;
+              this.message = error.response.data.message;
+              this.modals.fail = true;
               console.log(this.message);
             }
           )
