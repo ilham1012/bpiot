@@ -48,7 +48,7 @@ db.sequelize.sync({ alter: true }).then(() => {
     // initial().then(console.log("initial"));
 });
 
-// const Role = db.role; 
+// const Role = db.role;
 const User = db.user;
 const ProjectController = require('./app/controllers/project.controller');
 const DeviceController = require('./app/controllers/device.controller');

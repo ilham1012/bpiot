@@ -1,5 +1,6 @@
 const { authJwt } = require("../middleware");
 const l_controller = require("../controllers/last_tele.controller");
+const t_controller = require("../controllers/telemetry.controller");
 const auth = require("../controllers/auth.controller");
 
 module.exports = function(app) {
@@ -14,4 +15,5 @@ module.exports = function(app) {
     // ----- API -----
     app.get("/api/v1/telemetries/last/device/:id",  l_controller.api_findAll);
     app.get("/api/v1/telemetries/last/:id", l_controller.api_findById);
+    app.get("/api/v1/telemetries", t_controller.api_find); 
 };
