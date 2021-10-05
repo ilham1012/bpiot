@@ -67,8 +67,7 @@ telemetry.formatData = (teles) => {
 
 telemetry.api_find = async (req, res) => {  
     console.log("zzzzzzzzzz");
-    // let device = await db.device.findOne({where: {uid: req.params.device_uid}});
-    let result = await telemetry.find(req.body.device_id, req.body.key_id);
+    let result = await telemetry.find(req.params.device_id, req.params.key_id);
 
     console.log(result);
 

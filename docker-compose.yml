@@ -1,25 +1,14 @@
-version: "3"
+version: '3'
 services:
-  
-  # subscriber:
-  #   build: ./test
-  #   working_dir: /code
-  #   volumes:
-  #     - ./test:/code
-  #   depends_on:
-  #     - broker
-
   zookeeper:
     image: 'bitnami/zookeeper:latest'
     restart: unless-stopped
     ports:
-     - '2181:2181'
+      - '2181:2181'
     environment:
-      ZOO_ENABLE_AUTH: "yes"
+      ZOO_ENABLE_AUTH: 'yes'
       ZOO_SERVER_USERS: kafka
       ZOO_SERVER_PASSWORDS: kafka_password
-
-      
   kafka:
     image: 'bitnami/kafka:latest'
     restart: unless-stopped
@@ -28,91 +17,61 @@ services:
       - '9094:9094'
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
-      KAFKA_LISTENERS: INSIDE://:9092,OUTSIDE://:9094
-      KAFKA_ADVERTISED_LISTENERS: INSIDE://:9092,OUTSIDE://172.17.0.1:9094
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT'
+      KAFKA_LISTENERS: 'INSIDE://:9092,OUTSIDE://:9094'
+      KAFKA_ADVERTISED_LISTENERS: 'INSIDE://:9092,OUTSIDE://172.17.0.1:9094'
       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
-      ALLOW_PLAINTEXT_LISTENER: "yes"
+      ALLOW_PLAINTEXT_LISTENER: 'yes'
     depends_on:
       - zookeeper
-
-
   mk_bridge:
     build: ./mk_bridge
     restart: unless-stopped
     volumes:
-      - ./mk_bridge:/code
+      - './mk_bridge:/code'
     ports:
-      - 3967:3967
+      - '3967:3967'
     environment:
-      KAFKA_HOST: kafka:9092
+      KAFKA_HOST: 'kafka:9092'
     depends_on:
       - kafka
       - broker
-
-
-  # mqtt_kafka:
-  #   build: ./mqtt_kafka
-  #   restart: unless-stopped
-  #   # volumes:
-  #   #   - ./mqtt_kafka:/code
-  #   ports:
-  #     - 3967:3967
-  #   # depends_on:
-  #   #   - kafka
-
-
   broker:
     image: vernemq/vernemq
     restart: unless-stopped
-    ports: 
-      - 1883:1883
+    ports:
+      - '1883:1883'
     environment:
-      DOCKER_VERNEMQ_ACCEPT_EULA: "yes"
-      DOCKER_VERNEMQ_ALLOW_ANONYMOUS: "off"
-      DOCKER_VERNEMQ_PLUGINS__VMQ_PASSWD: "off"
-      DOCKER_VERNEMQ_PLUGINS__VMQ_ACL: "off"
-      DOCKER_VERNEMQ_PLUGINS__VMQ_DIVERSITY: "on"
-      DOCKER_VERNEMQ_VMQ_DIVERSITY__HTTP_AUTH__file: "/auth_http.lua"
+      DOCKER_VERNEMQ_ACCEPT_EULA: 'yes'
+      DOCKER_VERNEMQ_ALLOW_ANONYMOUS: 'off'
+      DOCKER_VERNEMQ_PLUGINS__VMQ_PASSWD: 'off'
+      DOCKER_VERNEMQ_PLUGINS__VMQ_ACL: 'off'
+      DOCKER_VERNEMQ_PLUGINS__VMQ_DIVERSITY: 'on'
+      DOCKER_VERNEMQ_VMQ_DIVERSITY__HTTP_AUTH__file: /auth_http.lua
       HTTP_AUTH: auth
     volumes:
-      - ./broker/auth_http.lua:/auth_http.lua
-  
-
-  # auth:
-  #   build: ./jwt
-  #   restart: unless-stopped
-  #   volumes:
-  #     - ./jwt:/code
-  #   ports:
-  #     - 3000:3000 
-
-
-  # transport:
-  #   container_name: transport
-  #   image: rabbitmq:3.8.14-management
-  #   restart: unless-stopped
-  #   hostname: rabbit
-
-
-  # frontend:
-  #   build: ./frontend
-  #   ports:
-  #     - 8080:8080
-  #   depends_on:
-  #     - backend
-  #   volumes:
-  #     - ./frontend:/code
-
-
+      - './broker/auth_http.lua:/auth_http.lua'
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    ports:
+      - '8081:8081'
+    environment:
+      B_HOST: backend
+      B_PORT: 5000
+      F_PORT: 8081
+    depends_on:
+      - backend
+    volumes:
+      - './frontend:/code'
   backend:
     build: ./backend
     restart: unless-stopped
     volumes:
-      - ./backend:/code
+      - './backend:/code'
     ports:
-      - 5000:5000
+      - '5000:5000'
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: testpass
@@ -120,34 +79,16 @@ services:
       POSTGRES_HOST: db
       POSTGRES_PORT: 5432
       PORT: 5000
+      F_PORT: 8081
     depends_on:
-      # - auth
       - db
-      # - mk_bridge
-
-
+      - kafka
   db:
-    image: "timescale/timescaledb:2.1.0-pg12"
+    image: 'timescale/timescaledb:2.1.0-pg12'
     restart: unless-stopped
     ports:
-      - 5432:5432
+      - '5432:5432'
     environment:
-      # POSTGRES_USER: testuser
       POSTGRES_PASSWORD: testpass
     volumes:
-      - ./db/data:/var/lib/postgresql/data
-
-
-  # tsdb:
-  #   image: "influxdb:2.0-alpine"
-  #   ports:
-  #     - 8086:8086
-  #   environment:
-
-  #   volumes: 
-  #     - ./db/ts:/var/lib/influxdb
-
-  # node_rdkafka:
-  #   build: ./node_rdkafka
-  #   volumes: 
-  #     - ./node_rdkafka/src:/src
+      - './db/data:/var/lib/postgresql/data'

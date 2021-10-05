@@ -17,6 +17,8 @@ import StatsCard from "../components/StatsCard";
 import TabPane from "../components/Tabs/TabPane";
 import Tabs from "../components/Tabs/Tabs";
 
+import PlotlyCart from "../components/Charts/PlotlyChart";
+
 // import VueNextSelect from 'vue-next-select';
 import VueformMultiselect from '@vueform/multiselect';
 import { ElTooltip, ElPopover } from "element-plus";
@@ -44,7 +46,8 @@ const GlobalComponents = {
     app.component("tabs", Tabs);
     
     // app.component("vue-select", VueNextSelect);
-    app.component('Multiselect', VueformMultiselect)
+    app.component('Multiselect', VueformMultiselect);
+    app.component('plotly-chart', PlotlyCart);
 
     app.use(ElTooltip);
     app.use(ElPopover);

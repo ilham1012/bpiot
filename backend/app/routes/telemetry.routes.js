@@ -15,5 +15,5 @@ module.exports = function(app) {
     // ----- API -----
     app.get("/api/v1/telemetries/last/device/:id",  l_controller.api_findAll);
     app.get("/api/v1/telemetries/last/:id", l_controller.api_findById);
-    app.get("/api/v1/telemetries", t_controller.api_find); 
+    app.get("/api/v1/telemetries/device/:device_id/key/:key_id", t_controller.api_find); 
 };

@@ -20,7 +20,7 @@
     
     <div class="container-fluid mt--7">
       <div class="row">
-        <div class="col-xl-8">
+        <div class="col-xl-7">
           <card shadow type="secondary" class="mb-4">
             <template v-slot:header>
               <div class="bg-white border-0">
@@ -136,7 +136,7 @@
           </card>
         </div>
 
-        <div class="col-xl-4">
+        <div class="col-xl-5">
           <card shadow gradient="secondary">
             <template v-slot:header>
               <div class="border-0">
@@ -152,7 +152,7 @@
             </template>
 
             <div >
-              <last-tele-table :tele="last_teles"></last-tele-table>
+              <last-tele-table :tele="last_teles" :deviceId="device.id" ></last-tele-table>
             </div>
 
           </card>
@@ -211,6 +211,8 @@
 
       </card>
     </modal>
+
+    
   </div>
 </template>
 
@@ -242,8 +244,9 @@ export default {
       last_teles: [],
       projects: [],
       Acl : [],
-      new_acl: false,
       device_id : "",
+
+      new_acl: false,
       
       id : ""
     };
@@ -284,7 +287,7 @@ export default {
          });
     },
     showACL(id){
-    this.new_acl = true;
+      this.new_acl = true;
       this.id = id;
       AclService.get(id)
         .then(response => {
@@ -293,7 +296,9 @@ export default {
         .catch(e => {
           console.log(e);
         });
-  },
+    },
+    
+
     async retrieveDevice() {
       console.log("retrieve device");
 

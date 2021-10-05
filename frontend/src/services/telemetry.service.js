@@ -23,7 +23,7 @@ class TelemetryService {
 
             row.id = tele.id;
             row.time = tele.time;
-            row.key = tele.key.key;
+            row.key = tele.key;
             row.value = val;
 
             data.push(row);
@@ -34,6 +34,16 @@ class TelemetryService {
 
     async getLast(id) {
         return http.get(`/telemetries/last/${id}`);
+    }
+
+    async getTele(device_id, key_id) {
+        // let query = {
+        //     "device_id": device_id,
+        //     "key_id": key_id,
+        //     // "limit": limit,
+        // };
+
+        return http.get(`/telemetries/device/${device_id}/key/${key_id}/`);
     }
 
     

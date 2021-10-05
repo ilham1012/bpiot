@@ -68,7 +68,7 @@ module.exports.run = async function(opt){
     const saveDB = async(payload) => {
         // message = JSON.parse(message);
         console.log("SaveDB");
-        console.log(payload);
+        console.log(payload); 
         // const device_id = message.device_id;
         // const time = message.time;
 

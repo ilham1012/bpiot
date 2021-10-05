@@ -22,6 +22,7 @@ import store from './store';
 // import { Field, Form } from 'vee-validate';
 import ArgonDashboard from "./plugins/argon-dashboard";
 import "element-plus/lib/theme-chalk/index.css";
+import moment from "moment";
 
 const appInstance = createApp(App);
 appInstance.use(router);
@@ -29,3 +30,9 @@ appInstance.use(store);
 // appInstance.use(VeeValidate);
 appInstance.use(ArgonDashboard);
 appInstance.mount("#app");
+
+appInstance.config.globalProperties.$filters = {
+    moment(value) {
+      return moment(value).format('DD-MM-YY HH:mm:ss')
+    }
+  }
