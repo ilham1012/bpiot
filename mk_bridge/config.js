@@ -6,7 +6,7 @@ module.exports = {
     mqtt: { // # see https://github.com/mqttjs/MQTT.js#mqttclientstreambuilder-options
         url: null,
         options: {
-            clientId: "example-client",
+            clientId: "mkbridge",
             username: "example",
             password: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjMyMTA3NjI0fQ.HO_KrqXH537meO6HjodRpzp916fejMrTc2E1nIPphF0",
             host: "broker",
@@ -21,8 +21,8 @@ module.exports = {
         logger: undefined,
         noptions: {
             //"debug": "all",
-            metadata_broker_list: [process.env.KAFKA_HOST || "kafka:9092"], //172.20.0.6
-            client_id: "mqtt-bridge-example-client",
+            metadata_broker_list: ["kafka:9092"], //process.env.KAFKA_HOST || 172.20.0.6
+            client_id: "mk-bridge",
             "event_cb": true,
             "compression.codec": "none",
             "retry.backoff.ms": 200,

@@ -18,7 +18,7 @@ module.exports.run = async function(opt){
 
 
     // var client = mqtt.connect("mqtt://"+opt.broker,
-    // {
+    // { 
     //     clientId:"mqttjs01",
     //     // username:"steve",
     //     // password:"password",
