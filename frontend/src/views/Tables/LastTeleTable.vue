@@ -51,7 +51,9 @@
 <script>
 
 import TelemetryService from "../../services/telemetry.service";
-import moment from "moment";
+// import moment from "moment";
+
+// import Plotly from "plotly.js";
 
 export default {
   name: "last-tele-table",
@@ -66,11 +68,18 @@ export default {
         uuid: "123",
         traces: [
           {
-            x: [],
-            y: [],
+            x: [
+              // "2021-09-21T01:32:40.448Z", "2021-09-29T03:19:19.011Z",
+              // "2021-09-29T03:21:53.280Z", "2021-09-29T03:22:02.213Z",
+              // "2021-09-29T03:22:08.614Z", "2021-09-29T03:22:25.603Z",
+              // "2021-10-09T23:51:42.856Z"
+               ],
+            y: [
+              // 27.43, 35.5, 34.5, 34.8, 34.9, 35.1, 33
+            ],
 
             type: "scatter",
-            mode: "lines",
+            // mode: "lines",
             line: {
               color: "#5e9e7e",
               width: 4,
@@ -82,10 +91,10 @@ export default {
           title:'Please select telemetry key',
           font_size: 16,
           xaxis: {
-            title: 'xaxis title'
+            title: 'time'
           },
           yaxis: {
-            title: 'yaxis title'
+            title: 'value'
           }
         },
         config: {
@@ -112,13 +121,16 @@ export default {
       await this.retrieveTele(id);
       // this.chart.traces[0].y.push(Math.random()*100);
       // this.chart.traces[0].x.push(this.chart.traces[0].x.length);
-      this.chart.traces[0].x = this.telemetry.time.map((time) => moment(time).format("YYYY-MM-DD HH:MM:SS.ss"));
-      this.chart.traces[0].y = this.telemetry.values;
-      this.chart.layout.title = this.telemetry.telemetry_key.key;
-      this.chart.layout.datarevision = new Date().getTime();
+      // let time = await this.telemetry.time.map((time) => moment(time).format("YYYY-MM-DD HH:MM:SS.ss"));
       console.log('update chart traces');
-      console.log(typeof(this.chart.traces[0].x));
-      // this.chart.layout.title = this.telemetry.telemetry_key.key;
+      this.chart.traces[0].x = this.telemetry.time;
+      this.chart.traces[0].y = this.telemetry.values;
+      this.chart.layout.title = '';
+      this.chart.layout.yaxis.title = this.telemetry.telemetry_key.key;
+      this.chart.layout.datarevision = new Date().getTime();
+      console.log(this.chart.traces);
+
+      // Plotly.newPlot(this.chart.uuid, this.chart.traces, this.chart.layout, this.chart.config);
 
       this.show_viz = true;
 

@@ -43,7 +43,13 @@ class TelemetryService {
         //     // "limit": limit,
         // };
 
-        return http.get(`/telemetries/device/${device_id}/key/${key_id}/`);
+        let result = await http.get(`/telemetries/device/${device_id}/key/${key_id}/`);
+        console.log('result');
+        console.log(result);
+        result.data.time = await result.data.time.reverse();
+        result.data.values = await result.data.values.reverse();
+        console.log(typeof(result.data.time));
+        return result;
     }
 
     
